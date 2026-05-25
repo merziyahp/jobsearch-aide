@@ -1,0 +1,45 @@
+EXTENSION NAME
+JobSearch Aide
+
+
+CATEGORY
+Productivity
+
+
+SHORT DESCRIPTION (98 characters — paste as-is)
+Stop copy-pasting job descriptions. One click saves to your spreadsheet and preps your AI tools.
+
+
+KEYWORDS (enter each on its own line in the dashboard)
+job tracker
+job search
+LinkedIn
+Google Sheets
+application tracker
+
+
+LONG DESCRIPTION (paste as-is — line breaks are preserved)
+If you're using ChatGPT or Claude to tailor your resume and cover letters, you already know the drill: find the listing, download or copy the job description, switch to your tracker to log the details, switch to your AI tool to paste everything in and tailor your resume. That's four steps before you've written a single word. JobSearch Aide gets it down to one.
+
+SAVE JOB LISTINGS
+On any job posting, click the extension. It captures the role, company, and link, logs it to your Google Sheet, and downloads a clean copy of the job description as a text file — ready to paste straight into ChatGPT, Claude, or any AI tool without reformatting.
+
+TRACK OUTREACH
+On a LinkedIn contact page, click the extension to pull up a quick form. Enter the details you want to log — name, role, company — and save. It writes directly to your outreach sheet — and if you're using the free JobSearch Aide Google Sheets template, a follow-up date is filled in automatically so you know exactly when to check back. No more switching between LinkedIn and a spreadsheet to keep track of who you've contacted.
+
+HOW IT WORKS
+Connect your Google Sheet once during setup. After that, every job you save and every contact you log goes straight to your spreadsheet — organized, timestamped, and ready for follow-up. Your data stays in a sheet you own, not locked in a third-party app.
+
+BUILT FOR
+Job seekers doing an active, organized search who use AI to customize their applications and want everything in one place without the tab-switching.
+
+ALSO INCLUDED
+Autofill (beta) — fills personal information fields on job applications from a saved profile.
+
+
+SCREENSHOT CAPTIONS (enter below each screenshot in the dashboard)
+Screenshot 1: One click on any job listing. Saved.
+Screenshot 2: Your full job tracker, in a spreadsheet you own.
+Screenshot 3: Job description ready to paste into any AI tool.
+Screenshot 4: Log a contact without leaving LinkedIn.
+Screenshot 5: Pairs with our free template — follow-up dates filled automatically.

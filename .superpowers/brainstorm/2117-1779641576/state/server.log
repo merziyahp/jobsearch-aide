@@ -1,0 +1,14 @@
+{"type":"server-started","port":61651,"host":"127.0.0.1","url_host":"localhost","url":"http://localhost:61651","screen_dir":"/Users/merziyahpoonawala/tech_projects/jd_tracker_chrome_extension/.superpowers/brainstorm/2117-1779641576/content","state_dir":"/Users/merziyahpoonawala/tech_projects/jd_tracker_chrome_extension/.superpowers/brainstorm/2117-1779641576/state"}
+{"type":"screen-added","file":"/Users/merziyahpoonawala/tech_projects/jd_tracker_chrome_extension/.superpowers/brainstorm/2117-1779641576/content/waiting.html"}
+{"type":"screen-added","file":"/Users/merziyahpoonawala/tech_projects/jd_tracker_chrome_extension/.superpowers/brainstorm/2117-1779641576/content/naming.html"}
+{"source":"user-event","type":"click","text":"D\n    \n      ApplyStash\n      Captures the \"grab and store\" behavior. \"Stash\" implies a personal, organized collection. A bit playful without being cutesy.","choice":"applystash","id":null,"timestamp":1779641945686}
+{"type":"screen-added","file":"/Users/merziyahpoonawala/tech_projects/jd_tracker_chrome_extension/.superpowers/brainstorm/2117-1779641576/content/naming-v2.html"}
+{"type":"screen-added","file":"/Users/merziyahpoonawala/tech_projects/jd_tracker_chrome_extension/.superpowers/brainstorm/2117-1779641576/content/approaches.html"}
+{"type":"screen-added","file":"/Users/merziyahpoonawala/tech_projects/jd_tracker_chrome_extension/.superpowers/brainstorm/2117-1779641576/content/copy-design.html"}
+{"type":"screen-added","file":"/Users/merziyahpoonawala/tech_projects/jd_tracker_chrome_extension/.superpowers/brainstorm/2117-1779641576/content/long-description.html"}
+{"type":"screen-added","file":"/Users/merziyahpoonawala/tech_projects/jd_tracker_chrome_extension/.superpowers/brainstorm/2117-1779641576/content/long-description-v2.html"}
+{"type":"screen-added","file":"/Users/merziyahpoonawala/tech_projects/jd_tracker_chrome_extension/.superpowers/brainstorm/2117-1779641576/content/screenshots-plan.html"}
+{"type":"screen-added","file":"/Users/merziyahpoonawala/tech_projects/jd_tracker_chrome_extension/.superpowers/brainstorm/2117-1779641576/content/promo-tile.html"}
+{"type":"screen-added","file":"/Users/merziyahpoonawala/tech_projects/jd_tracker_chrome_extension/.superpowers/brainstorm/2117-1779641576/content/promo-tile-v2.html"}
+{"type":"screen-added","file":"/Users/merziyahpoonawala/tech_projects/jd_tracker_chrome_extension/.superpowers/brainstorm/2117-1779641576/content/waiting-2.html"}
+{"type":"server-stopped","reason":"idle timeout"}

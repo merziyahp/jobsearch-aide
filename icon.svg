@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="512" height="512">
+  <!-- Background -->
+  <rect x="0" y="0" width="128" height="128" rx="22" fill="#1a5c4f"/>
+  <!-- Document -->
+  <rect x="20" y="18" width="55" height="68" rx="5" fill="white" opacity="0.95"/>
+  <!-- Corner fold -->
+  <polygon points="57,18 75,36 75,18" fill="#0d3d35" opacity="0.5"/>
+  <path d="M57 18 L75 36" fill="none" stroke="white" stroke-width="1.5" opacity="0.5"/>
+  <!-- Doc lines -->
+  <line x1="28" y1="44" x2="67" y2="44" stroke="#1a5c4f" stroke-width="2" stroke-linecap="round" opacity="0.3"/>
+  <line x1="28" y1="54" x2="67" y2="54" stroke="#1a5c4f" stroke-width="2" stroke-linecap="round" opacity="0.3"/>
+  <line x1="28" y1="64" x2="52" y2="64" stroke="#1a5c4f" stroke-width="2" stroke-linecap="round" opacity="0.3"/>
+  <!-- Large sparkle -->
+  <path d="M95 73 C97.5 79 99.5 81 106 83.5 C99.5 86 97.5 88 95 94 C92.5 88 90.5 86 84 83.5 C90.5 81 92.5 79 95 73 Z" fill="#e8a020"/>
+  <!-- Small sparkle -->
+  <path d="M109 61 C110 64 111 65 114 66 C111 67 110 68 109 71 C108 68 107 67 104 66 C107 65 108 64 109 61 Z" fill="#e8a020"/>
+</svg>

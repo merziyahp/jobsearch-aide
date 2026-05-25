@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { width: 440px; height: 280px; overflow: hidden; background: #fff; }
+    .tile {
+      width: 440px;
+      height: 280px;
+      background: #1a5c4f;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
+    .chip {
+      font-size: 0.55rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #a8d5c8;
+      margin-bottom: 0.5rem;
+    }
+    .title {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 1.25rem;
+      letter-spacing: -0.01em;
+    }
+    .checklist {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      align-items: flex-start;
+      margin-bottom: 1.25rem;
+    }
+    .item {
+      font-size: 0.8rem;
+      color: #e8f5f2;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .check {
+      color: #e8a020;
+      font-weight: 700;
+      font-size: 1rem;
+      line-height: 1;
+    }
+    .tagline {
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: #a8d5c8;
+      letter-spacing: 0.04em;
+    }
+  </style>
+</head>
+<body>
+  <div class="tile">
+    <div class="chip">Chrome Extension</div>
+    <div class="title">JobSearch Aide</div>
+    <div class="checklist">
+      <div class="item"><span class="check">✓</span> Job listing saved to Google Sheets</div>
+      <div class="item"><span class="check">✓</span> AI-ready job description downloaded</div>
+      <div class="item"><span class="check">✓</span> Outreach contact logged</div>
+    </div>
+    <div class="tagline">All in one click.</div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JDTracker</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      width: 380px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #fff;
+      color: #1a1a1a;
+    }
+
+    /* ── Header ── */
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 14px 16px 0;
+    }
+
+    .logo {
+      width: 28px; height: 28px;
+      background: #1a5c4f;
+      border-radius: 7px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; flex-shrink: 0;
+    }
+
+    .header h1 { font-size: 15px; font-weight: 600; color: #1a1a1a; }
+    .header .subtitle { font-size: 11px; color: #999; margin-top: 1px; }
+
+    /* ── Tabs ── */
+    .tabs {
+      display: flex;
+      gap: 0;
+      padding: 10px 16px 0;
+      border-bottom: 1px solid #efefef;
+      margin-top: 10px;
+    }
+
+    .tab {
+      font-size: 12px;
+      font-weight: 500;
+      color: #999;
+      padding: 6px 12px;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -1px;
+      transition: color 0.15s;
+      background: none;
+      border-top: none;
+      border-left: none;
+      border-right: none;
+      font-family: inherit;
+    }
+
+    .tab:hover { color: #555; }
+    .tab.active { color: #1a5c4f; border-bottom-color: #1a5c4f; font-weight: 600; }
+
+    /* ── Tab panels ── */
+    .panel { display: none; padding: 14px 16px; flex-direction: column; gap: 11px; }
+    .panel.active { display: flex; }
+
+    /* ── Fields ── */
+    .field { display: flex; flex-direction: column; gap: 4px; }
+
+    .field-row { display: flex; gap: 8px; }
+    .field-row .field { flex: 1; }
+
+    label {
+      font-size: 11px; font-weight: 500; color: #666;
+      text-transform: uppercase; letter-spacing: 0.04em;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    input[type="url"],
+    select {
+      width: 100%;
+      border: 1px solid #e0e0e0;
+      border-radius: 7px;
+      color: #1a1a1a;
+      font-size: 13px;
+      padding: 8px 10px;
+      outline: none;
+      background: #fff;
+      transition: border-color 0.15s, box-shadow 0.15s;
+      font-family: inherit;
+    }
+
+    input:focus, select:focus {
+      border-color: #1a5c4f;
+      box-shadow: 0 0 0 3px rgba(26,92,79,0.08);
+    }
+
+    input::placeholder { color: #bbb; }
+
+    select {
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23999'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+      padding-right: 28px;
+      cursor: pointer;
+    }
+
+    .section-title {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #bbb;
+      padding-top: 4px;
+    }
+
+    /* ── Filename preview ── */
+    .filename-preview {
+      border: 1px solid #e8f4f1; border-radius: 7px;
+      padding: 7px 10px; font-size: 11px; color: #1a5c4f;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      word-break: break-all; background: #f5fbf9;
+    }
+
+    /* ── Content preview ── */
+    .preview-header { display: flex; align-items: center; justify-content: space-between; }
+
+    .preview-toggle {
+      font-size: 11px; color: #1a5c4f; cursor: pointer;
+      background: none; border: none; padding: 0;
+      font-family: inherit; font-weight: 500;
+    }
+    .preview-toggle:hover { text-decoration: underline; }
+
+    .preview-box {
+      border: 1px solid #e0e0e0; border-radius: 7px;
+      background: #fafafa; overflow: hidden; display: none;
+    }
+    .preview-box.open { display: block; }
+
+    .preview-scroll {
+      max-height: 140px; overflow-y: auto; padding: 10px 12px;
+    }
+    .preview-scroll::-webkit-scrollbar { width: 4px; }
+    .preview-scroll::-webkit-scrollbar-thumb { background: #ddd; border-radius: 2px; }
+
+    .preview-text {
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 11px; line-height: 1.6; color: #444;
+      white-space: pre-wrap; word-break: break-word;
+    }
+    .preview-text .md-heading { color: #1a5c4f; font-weight: 600; }
+    .preview-text .md-frontmatter { color: #999; font-style: italic; }
+    .preview-text .md-bullet { color: #888; }
+
+    .preview-chars {
+      font-size: 10px; color: #aaa;
+      padding: 5px 12px 7px;
+      border-top: 1px solid #eee; background: #f5f5f5;
+    }
+
+    /* ── Sheets strip ── */
+    .sheets-strip {
+      display: flex; align-items: center; justify-content: space-between;
+      background: #f5fbf9; border: 1px solid #d0ece6;
+      border-radius: 8px; padding: 8px 11px;
+    }
+    .sheets-strip-left { display: flex; align-items: center; gap: 7px; }
+    .sheets-icon { font-size: 14px; line-height: 1; }
+    .sheets-label { font-size: 12px; font-weight: 500; color: #1a5c4f; }
+    .sheets-sublabel { font-size: 10px; color: #888; margin-top: 1px; }
+
+    .btn-connect {
+      font-size: 11px; font-weight: 600; color: #fff;
+      background: #1a5c4f; border: none; border-radius: 5px;
+      padding: 5px 10px; cursor: pointer; font-family: inherit;
+      transition: background 0.15s; white-space: nowrap;
+    }
+    .btn-connect:hover { background: #154d42; }
+    .btn-connect.connected { background: #e6f4f1; color: #1a5c4f; cursor: default; }
+    .btn-connect.connected:hover { background: #e6f4f1; }
+
+    /* ── Toggles ── */
+    .toggle-row {
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .toggle-wrap { display: flex; align-items: center; gap: 6px; cursor: pointer; }
+    .toggle { position: relative; width: 30px; height: 17px; }
+    .toggle input { opacity: 0; width: 0; height: 0; }
+    .toggle-slider {
+      position: absolute; inset: 0; background: #ddd;
+      border-radius: 17px; transition: background 0.2s;
+    }
+    .toggle-slider:before {
+      content: ''; position: absolute;
+      width: 13px; height: 13px; left: 2px; top: 2px;
+      background: #fff; border-radius: 50%; transition: transform 0.2s;
+    }
+    .toggle input:checked + .toggle-slider { background: #1a5c4f; }
+    .toggle input:checked + .toggle-slider:before { transform: translateX(13px); }
+    .toggle-label { font-size: 12px; color: #555; }
+
+    /* ── Divider ── */
+    .divider { height: 1px; background: #f0f0f0; }
+
+    /* ── Buttons ── */
+    .btn-primary {
+      width: 100%; background: #1a5c4f; border: none;
+      border-radius: 8px; color: #fff; font-size: 13px;
+      font-weight: 600; padding: 10px; cursor: pointer;
+      transition: background 0.15s; font-family: inherit;
+    }
+    .btn-primary:hover { background: #154d42; }
+    .btn-primary:disabled { background: #ccc; cursor: not-allowed; }
+
+    .btn-secondary {
+      width: 100%; background: #fff; border: 1px solid #e0e0e0;
+      border-radius: 8px; color: #555; font-size: 13px;
+      font-weight: 500; padding: 10px; cursor: pointer;
+      transition: all 0.15s; font-family: inherit;
+    }
+    .btn-secondary:hover { border-color: #1a5c4f; color: #1a5c4f; }
+
+    .btn-row { display: flex; gap: 8px; }
+    .btn-row .btn-primary,
+    .btn-row .btn-secondary { flex: 1; }
+
+    /* ── Autofill legend ── */
+    .legend {
+      display: flex; gap: 12px; flex-wrap: wrap;
+    }
+    .legend-item {
+      display: flex; align-items: center; gap: 5px;
+      font-size: 11px; color: #666;
+    }
+    .legend-dot {
+      width: 10px; height: 10px; border-radius: 2px;
+    }
+    .legend-dot.filled   { background: #22c55e; }
+    .legend-dot.sensitive { background: #f59e0b; }
+
+    .autofill-result {
+      font-size: 12px; color: #666;
+      background: #f9f9f9; border: 1px solid #eee;
+      border-radius: 7px; padding: 10px 12px;
+      display: none;
+    }
+    .autofill-result.visible { display: block; }
+    .autofill-result strong { color: #1a5c4f; }
+
+    /* ── Steps ── */
+    .steps { display: flex; flex-direction: column; gap: 3px; }
+    .step { display: flex; align-items: center; gap: 6px; font-size: 11px; color: #aaa; }
+    .step .dot { width: 6px; height: 6px; border-radius: 50%; background: #e0e0e0; flex-shrink: 0; }
+    .step.done .dot { background: #1a5c4f; }
+    .step.done { color: #1a5c4f; }
+    .step.error-step .dot { background: #dc2626; }
+    .step.error-step { color: #dc2626; }
+    .step.active .dot { background: #f59e0b; animation: pulse 1s infinite; }
+
+    @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.3; } }
+
+    /* ── Status ── */
+    .status { font-size: 12px; text-align: center; min-height: 16px; color: #aaa; }
+    .status.success { color: #1a5c4f; font-weight: 500; }
+    .status.error   { color: #dc2626; }
+
+    /* ── Settings ── */
+    .settings-note {
+      font-size: 11px; color: #888; line-height: 1.5;
+      background: #f9f9f9; border-radius: 7px; padding: 9px 11px;
+    }
+
+    .save-indicator {
+      font-size: 11px; color: #1a5c4f; text-align: right;
+      min-height: 16px; opacity: 0; transition: opacity 0.3s;
+    }
+    .save-indicator.visible { opacity: 1; }
+
+    /* ── Spinner ── */
+    .extracting { text-align: center; padding: 28px 0 20px; color: #aaa; font-size: 13px; }
+    .spinner {
+      width: 18px; height: 18px;
+      border: 2px solid #e0e0e0; border-top-color: #1a5c4f;
+      border-radius: 50%; animation: spin 0.7s linear infinite;
+      margin: 0 auto 10px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .hint { font-size: 11px; color: #aaa; margin-top: 2px; }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <div class="logo">📄</div>
+    <div>
+      <h1>JDTracker</h1>
+      <div class="subtitle">Job search toolkit</div>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <button class="tab active" data-tab="save">Save JD</button>
+    <button class="tab" data-tab="outreach">Outreach</button>
+    <button class="tab" data-tab="autofill">Autofill <span style="font-size:9px;font-weight:700;color:#f59e0b;vertical-align:middle">BETA</span></button>
+    <button class="tab" data-tab="settings">Settings</button>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       TAB: Save JD
+  ══════════════════════════════════════════════ -->
+  <div class="panel active" id="panel-save">
+
+    <div id="loading" class="extracting">
+      <div class="spinner"></div>
+      Extracting page...
+    </div>
+
+    <div id="save-form" style="display:contents">
+
+      <div class="field">
+        <label>Company</label>
+        <input type="text" id="company" placeholder="e.g. Stripe" />
+      </div>
+
+      <div class="field">
+        <label>Job Title</label>
+        <input type="text" id="role" placeholder="e.g. Senior Engineer" />
+      </div>
+
+      <div class="field">
+        <label>Filename</label>
+        <div class="filename-preview" id="filename-preview">—</div>
+      </div>
+
+      <div class="field">
+        <div class="preview-header">
+          <label>Content Preview</label>
+          <button class="preview-toggle" id="preview-toggle">Show</button>
+        </div>
+        <div class="preview-box" id="preview-box">
+          <div class="preview-scroll">
+            <div class="preview-text" id="preview-text"></div>
+          </div>
+          <div class="preview-chars" id="preview-chars"></div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="field">
+        <label>Save Folder</label>
+        <input type="text" id="folder" placeholder="e.g. Jobs or Jobs/2026" />
+        <div class="hint">Subfolder inside your Downloads folder</div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Sheets -->
+      <div class="sheets-strip">
+        <div class="sheets-strip-left">
+          <div class="sheets-icon">📊</div>
+          <div>
+            <div class="sheets-label">Google Sheets</div>
+            <div class="sheets-sublabel" id="sheets-sublabel">Not connected</div>
+          </div>
+        </div>
+        <button class="btn-connect" id="btn-connect">Connect</button>
+      </div>
+
+      <div class="field">
+        <label>Fit Level (1-10)</label>
+        <input type="text" id="fit-level" placeholder="e.g. 8" maxlength="2" />
+      </div>
+
+      <div class="field">
+        <label>Status</label>
+        <select id="status-select">
+          <option value="Applied">Applied</option>
+          <option value="Bookmarked">Bookmarked</option>
+          <option value="Interviewing">Interviewing</option>
+          <option value="Offer">Offer</option>
+          <option value="Rejected">Rejected</option>
+          <option value="Not Applying">Not Applying</option>
+        </select>
+      </div>
+
+      <div class="toggle-row">
+        <label class="toggle-wrap" for="toggle-sheets">
+          <div class="toggle">
+            <input type="checkbox" id="toggle-sheets" checked />
+            <div class="toggle-slider"></div>
+          </div>
+          <span class="toggle-label">Log to Application Tracker</span>
+        </label>
+      </div>
+
+      <div class="toggle-row">
+        <label class="toggle-wrap" for="toggle-overwrite">
+          <div class="toggle">
+            <input type="checkbox" id="toggle-overwrite" />
+            <div class="toggle-slider"></div>
+          </div>
+          <span class="toggle-label">Overwrite if URL already exists</span>
+        </label>
+      </div>
+
+      <div class="divider"></div>
+
+      <button class="btn-primary" id="btn-save">↓ Save & Log</button>
+
+      <div class="steps" id="steps" style="display:none">
+        <div class="step" id="step-md"><div class="dot"></div><span>Save markdown file</span></div>
+        <div class="step" id="step-sheets"><div class="dot"></div><span>Log to Google Sheets</span></div>
+      </div>
+
+      <div class="status" id="save-status"></div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       TAB: Autofill
+  ══════════════════════════════════════════════ -->
+  <div class="panel" id="panel-autofill">
+
+    <p style="font-size:13px; color:#555; line-height:1.5;">
+      Pre-fills standard fields on the current page using your saved profile.
+      Review all highlighted fields before submitting.
+    </p>
+
+    <div class="legend">
+      <div class="legend-item">
+        <div class="legend-dot filled"></div>
+        <span>Filled — review before submit</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot sensitive"></div>
+        <span>Sensitive — highlighted only, not filled</span>
+      </div>
+    </div>
+
+    <div class="autofill-result" id="autofill-result"></div>
+
+    <div class="btn-row">
+      <button class="btn-primary" id="btn-autofill">Fill Form</button>
+      <button class="btn-secondary" id="btn-clear-fill">Clear</button>
+    </div>
+
+    <div class="status" id="autofill-status"></div>
+
+    <div class="hint" style="text-align:center">
+      Missing fields? Add your info in the Settings tab.
+    </div>
+
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       TAB: Settings
+  ══════════════════════════════════════════════ -->
+  <div class="panel" id="panel-settings">
+
+    <div class="settings-note">
+      Your profile is stored locally on this device only — never sent anywhere except to fill forms on your behalf.
+    </div>
+
+    <div class="section-title">Personal</div>
+
+    <div class="field-row">
+      <div class="field">
+        <label>First Name</label>
+        <input type="text" id="s-firstName" placeholder="Jane" />
+      </div>
+      <div class="field">
+        <label>Last Name</label>
+        <input type="text" id="s-lastName" placeholder="Smith" />
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Email</label>
+      <input type="email" id="s-email" placeholder="jane@example.com" />
+    </div>
+
+    <div class="field">
+      <label>Phone</label>
+      <input type="tel" id="s-phone" placeholder="+1 555 000 0000" />
+    </div>
+
+    <div class="section-title">Address</div>
+
+    <div class="field">
+      <label>Street Address</label>
+      <input type="text" id="s-address" placeholder="123 Main St" />
+    </div>
+
+    <div class="field-row">
+      <div class="field">
+        <label>City</label>
+        <input type="text" id="s-city" placeholder="New York" />
+      </div>
+      <div class="field" style="max-width:80px">
+        <label>State</label>
+        <input type="text" id="s-state" placeholder="NY" />
+      </div>
+      <div class="field" style="max-width:90px">
+        <label>Zip</label>
+        <input type="text" id="s-zip" placeholder="10001" />
+      </div>
+    </div>
+
+    <div class="section-title">Professional</div>
+
+    <div class="field">
+      <label>LinkedIn URL</label>
+      <input type="url" id="s-linkedin" placeholder="linkedin.com/in/janesmith" />
+    </div>
+
+    <div class="field">
+      <label>Website / Portfolio</label>
+      <input type="url" id="s-website" placeholder="janesmith.com" />
+    </div>
+
+    <div class="field">
+      <label>GitHub</label>
+      <input type="url" id="s-github" placeholder="github.com/janesmith" />
+    </div>
+
+    <div class="section-title">Work Authorization</div>
+
+    <div class="field">
+      <label>Status</label>
+      <select id="s-workAuth">
+        <option value="">— Select —</option>
+        <option value="US Citizen">US Citizen</option>
+        <option value="Green Card">Green Card / Permanent Resident</option>
+        <option value="H1B">H1B Visa</option>
+        <option value="OPT">OPT / CPT</option>
+        <option value="TN Visa">TN Visa</option>
+        <option value="Other">Other</option>
+      </select>
+    </div>
+
+    <div class="toggle-row">
+      <label class="toggle-wrap" for="s-sponsorship">
+        <div class="toggle">
+          <input type="checkbox" id="s-sponsorship" />
+          <div class="toggle-slider"></div>
+        </div>
+        <span class="toggle-label">Requires visa sponsorship</span>
+      </label>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="section-title">EEO / Demographic</div>
+
+    <div class="settings-note" style="background:#fffbeb; border-color:#fde68a; color:#78350f">
+      All fields optional. Leave blank to skip entirely. If set, the extension will try to match your answer to the closest available option — if it can't, it highlights the field yellow for you to fill manually.
+    </div>
+
+    <div class="field-row">
+      <div class="field">
+        <label>Gender</label>
+        <select id="s-gender">
+          <option value="">— Leave blank —</option>
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+          <option value="Non-Binary">Non-Binary</option>
+          <option value="Self-Describe">Self-Describe</option>
+          <option value="Do not wish to answer">Do not wish to answer</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Sexual Orientation</label>
+        <select id="s-sexualOrient">
+          <option value="">— Leave blank —</option>
+          <option value="Heterosexual">Heterosexual</option>
+          <option value="Gay or Lesbian">Gay or Lesbian</option>
+          <option value="Bisexual">Bisexual</option>
+          <option value="Self-Describe">Self-Describe</option>
+          <option value="Do not wish to answer">Do not wish to answer</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Race / Ethnicity</label>
+      <select id="s-race">
+        <option value="">— Leave blank —</option>
+        <option value="Native American">Native American or Alaska Native</option>
+        <option value="Black">Black or African American</option>
+        <option value="White">White</option>
+        <option value="Hispanic">Hispanic or Latinx</option>
+        <option value="East Asian">East Asian</option>
+        <option value="Southeast Asian">Southeast Asian</option>
+        <option value="South Asian">South Asian</option>
+        <option value="Middle Eastern">Middle Eastern or North African</option>
+        <option value="Pacific Islander">Pacific Islander</option>
+        <option value="Two or more">Two or more races</option>
+        <option value="Self-Describe">Self-Describe</option>
+        <option value="Do not wish to answer">Do not wish to answer</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label>Veteran Status</label>
+      <select id="s-veteran">
+        <option value="">— Leave blank —</option>
+        <option value="Not a veteran">Not a veteran</option>
+        <option value="Protected veteran">Protected veteran</option>
+        <option value="Do not wish to answer">Do not wish to answer</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label>Disability Status</label>
+      <select id="s-disability">
+        <option value="">— Leave blank —</option>
+        <option value="No disability">No disability</option>
+        <option value="Have a disability">Have a disability</option>
+        <option value="Do not wish to answer">Do not wish to answer</option>
+      </select>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="section-title">Google Sheets — Job Applications</div>
+
+    <div class="field">
+      <label>Sheet URL or ID</label>
+      <input type="text" id="s-sheetId" placeholder="Paste your Google Sheet URL" />
+      <div class="hint">Paste the full URL from your browser — the ID will be extracted automatically</div>
+    </div>
+
+    <div class="field" id="s-tabName-field" style="display:none">
+      <label>Tab</label>
+      <select id="s-tabName"></select>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="section-title">Google Sheets — Outreach Tracker</div>
+
+    <div class="field">
+      <label>Sheet URL or ID</label>
+      <input type="text" id="s-outreachSheetId" placeholder="Paste your Google Sheet URL" />
+      <div class="hint">Paste the full URL from your browser — the ID will be extracted automatically</div>
+    </div>
+
+    <div class="field" id="s-outreachTabName-field" style="display:none">
+      <label>Tab</label>
+      <select id="s-outreachTabName"></select>
+    </div>
+
+    <div class="divider"></div>
+
+    <button class="btn-primary" id="btn-save-profile">Save Settings</button>
+    <div class="save-indicator" id="save-indicator">✓ Settings saved</div>
+
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       TAB: Outreach
+  ══════════════════════════════════════════════ -->
+  <div class="panel" id="panel-outreach">
+
+    <div id="outreach-loading" class="extracting" style="display:none">
+      <div class="spinner"></div>
+      Reading profile...
+    </div>
+
+    <div id="outreach-form" style="display:contents">
+
+      <div class="field">
+        <label>Contact Name</label>
+        <input type="text" id="o-name" placeholder="e.g. Jane Smith" />
+      </div>
+
+      <div class="field">
+        <label>Company</label>
+        <input type="text" id="o-company" placeholder="e.g. Acme Corp" />
+      </div>
+
+      <div class="field">
+        <label>Role</label>
+        <input type="text" id="o-role" placeholder="e.g. Director of Product" />
+      </div>
+
+      <div class="field">
+        <label>LinkedIn URL</label>
+        <input type="url" id="o-url" placeholder="linkedin.com/in/janesmith" />
+      </div>
+
+      <div class="field">
+        <label>How We Connected</label>
+        <input type="text" id="o-howConnected" placeholder="e.g. LinkedIn, Meetup, Referral" />
+      </div>
+
+      <div class="field">
+        <label>Status</label>
+        <select id="o-status">
+          <option value="Pending 3B" selected>Pending 3B</option>
+          <option value="Pending 7B">Pending 7B</option>
+          <option value="Message Sent">Message Sent</option>
+          <option value="Prospect">Prospect</option>
+          <option value="Accepted">Accepted</option>
+          <option value="Responded">Responded</option>
+          <option value="Follow Up">Follow Up</option>
+          <option value="In Progress">In Progress</option>
+          <option value="Closed (Connected)">Closed (Connected)</option>
+          <option value="Close (No Response)">Close (No Response)</option>
+        </select>
+      </div>
+
+      <div class="divider"></div>
+
+      <button class="btn-primary" id="btn-save-outreach">Save Contact</button>
+
+      <div class="status" id="outreach-status"></div>
+
+    </div>
+
+  </div>
+
+  <script src="storage.js"></script>
+  <script src="sheets.js"></script>
+  <script src="outreach.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>
