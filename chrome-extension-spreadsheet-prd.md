@@ -262,3 +262,60 @@ Columns currently in use, mapped via the column mapping setup flow:
 - chrome.storage.sync decision — evaluate splitting settings between local and sync storage
 - Column mapping — needed before public Chrome Web Store release
 - Nice-to-have outreach statuses (Accepted, Responded, etc.) have no update logic — they get blocked on existing contacts, which is wrong
+
+---
+
+## Session Notes — May 24, 2026
+
+### What was built
+
+- **Extension renamed:** "JDTracker" → "JobSearch Aide" in `manifest.json`. Name is flexible if something better surfaces before public release.
+- **Chrome Web Store listing assets:** Full set of store-ready assets created in `store-listing/`:
+  - `copy.txt` — paste-ready store listing copy (name, short description, long description, keywords, screenshot captions)
+  - `promo-tile.html` — 440x280 promotional tile (dark green #1a5c4f, gold checkmarks #e8a020); screenshot to PNG manually via Chrome DevTools
+  - `screenshot-3.html` — 1280x800 split-view mockup showing AI-ready file + ChatGPT conversation; screenshot to PNG manually
+  - `shot-list.md` — step-by-step instructions for taking real screenshots 1, 2, 4, 5 with fake data provided
+  - `JobSearchAide.zip` — zipped `Code/` directory ready for Chrome Web Store upload (CLAUDE.md excluded)
+- **Static website built and deployed:**
+  - Two pages: `website/index.html` (landing page with waitlist form) and `website/privacy.html` (privacy policy)
+  - Live at https://merziyahp.github.io/jobsearch-aide/
+  - Waitlist form via Formspree (endpoint: https://formspree.io/f/mgoqlnlb)
+  - Contact email: merziyahpoonawala@gmail.com
+  - Privacy policy covers all four extension permissions (activeTab, storage, downloads, identity/Sheets) — ready for Chrome Web Store OAuth verification submission
+- **GitHub repo created:** https://github.com/merziyahp/jobsearch-aide — public, MIT license, includes extension code, store listing assets, website, and docs
+
+### Decisions made
+
+- **Positioning:** "AI-ready job search" angle. Target user: non-tech job seeker doing an active manual search, using ChatGPT/Claude to tailor applications, frustrated by copy-pasting.
+- **Store keywords:** job tracker, job search, LinkedIn, Google Sheets, application tracker — conventional terms for search traffic; differentiation carried by description copy, not tags.
+- **Closest competitor:** CareerSuite.AI — Sheets-connected, data ownership angle, some AI framing. Differentiator is the JD-download-for-AI workflow (nobody else doing this) and LinkedIn outreach + follow-up tracking.
+- **Website purpose:** Primarily a credibility signal once extension is live in store. Secondary: waitlist, privacy policy host. Not a launch announcement.
+- **Open source:** Public repo is a trust signal for a Chrome extension. No secret sauce to protect. Compatible with future donation page (Ko-fi/GitHub Sponsors) or paid Google Sheets template.
+
+### What still needs to happen before Trusted Testers launch
+
+#### Manual steps (you do these)
+1. **Take real screenshots** — follow `store-listing/shot-list.md` for screenshots 1, 2, 4, 5. Use fake but realistic data.
+2. **Export promo tile to PNG** — open `store-listing/promo-tile.html` in Chrome → DevTools → 440x280 → Capture screenshot → save as `store-listing/promo-tile.png`
+3. **Export screenshot 3 to PNG** — open `store-listing/screenshot-3.html` in Chrome → DevTools → 1280x800 → Capture screenshot → save as `store-listing/screenshot-3.png`
+4. **Create Chrome Web Store developer account** — one-time $5 fee at chrome.google.com/webstore/devconsole
+5. **Upload and configure listing:**
+   - Upload `store-listing/JobSearchAide.zip`
+   - Paste all copy from `store-listing/copy.txt`
+   - Upload screenshots (1–5) and `promo-tile.png`
+   - Category: Productivity
+   - Visibility: Private → Trusted Testers
+   - Add tester emails
+   - Submit for review (private listings review faster than public)
+6. **Share listing URL with testers** once approved
+
+#### Note on OAuth unverified app warning
+Testers will see a Google "unverified app" warning during sign-in. This is expected — Google OAuth verification is a separate process required for public release but not for Trusted Testers. Brief testers to expect it and click "Continue."
+
+### What still needs to happen before public release
+
+1. **Column mapping** — positional write logic must be replaced with header-based mapping before public release. Users with differently structured sheets will have a broken first experience without this.
+2. **Google OAuth verification** — required for public listing with the `spreadsheets` scope. Submit at myaccount.google.com/permissions. Expect 4–6 weeks. Requires the privacy policy URL (now live at https://merziyahp.github.io/jobsearch-aide/privacy.html).
+3. **Privacy policy linked in store listing** — privacy policy is live; add the URL when submitting for public review.
+4. **PDF download (optional)** — would broaden appeal for non-technical users. If added, update store copy to mention it.
+5. **Update website CTA** — once store listing is live, replace waitlist form in `website/index.html` with "Add to Chrome" button linking to store URL.
