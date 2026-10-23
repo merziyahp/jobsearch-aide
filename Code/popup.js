@@ -81,17 +81,45 @@ function setStep(id, state) {
   el.className = 'step ' + state;
 }
 
-function updateSheetsUI(connected) {
+function updateSheetsUI(connected, destination = '') {
   sheetsConnected = connected;
   if (connected) {
-    $('sheets-sublabel').textContent = 'Connected';
+    const label = destination || 'Connected · choose a sheet in Settings';
+    $('sheets-sublabel').textContent = label;
+    $('sheets-sublabel').title = label;
     $('btn-connect').textContent = '✓ Connected';
     $('btn-connect').classList.add('connected');
   } else {
     $('sheets-sublabel').textContent = 'Not connected';
+    $('sheets-sublabel').title = '';
     $('btn-connect').textContent = 'Connect';
     $('btn-connect').classList.remove('connected');
   }
+}
+
+async function refreshSheetsUI(settings = null) {
+  const connected = await isSignedIn().catch(() => false);
+  if (!connected) {
+    updateSheetsUI(false);
+    return;
+  }
+
+  const saved = settings || await loadSettings();
+  if (!saved.sheetId) {
+    updateSheetsUI(true);
+    return;
+  }
+
+  const metadata = await fetchSheetMetadata(saved.sheetId).catch(() => null);
+  if (!metadata?.title) {
+    updateSheetsUI(true, 'Connected · sheet unavailable');
+    return;
+  }
+
+  const destination = saved.tabName
+    ? `${metadata.title} · ${saved.tabName}`
+    : `${metadata.title} · choose a tab in Settings`;
+  updateSheetsUI(true, destination);
 }
 
 function decodeHtmlEntities(str) {
@@ -154,7 +182,7 @@ function populateFields(data) {
 
 function downloadFile(filename, content) {
   return new Promise((resolve, reject) => {
-    const blob = new Blob([content], { type: 'text/plain' });
+    const blob = new Blob([content], { type: 'text/markdown;charset=utf-8' });
     const url = URL.createObjectURL(blob);
     chrome.downloads.download({ url, filename, saveAs: false }, (downloadId) => {
       URL.revokeObjectURL(url);
@@ -282,6 +310,7 @@ async function runAutofill(tabId) {
       return;
     }
 
+    Telemetry.recordUse('autofill');
     const { filled, sensitive } = response.results;
     const result = $('autofill-result');
     result.classList.add('visible');
@@ -347,9 +376,120 @@ function switchToTab(tabName) {
   document.getElementById(`panel-${tabName}`).classList.add('active');
 }
 
+// ── Feedback prompt (see telemetry.js) ───────────────────────────────────────
+
+const FEEDBACK_QUESTIONS = {
+  first: {
+    tracker: 'Is saving jobs with JobSearch Aide useful so far?',
+    outreach: 'Is logging outreach with JobSearch Aide useful so far?',
+  },
+  second: {
+    tracker: 'Still finding job saving useful?',
+    outreach: 'Still finding outreach logging useful?',
+  },
+};
+
+let feedbackShownThisSession = false;
+let activeFeedback = null;   // { prompt, feature }
+let feedbackResponse = null; // 'up' | 'down'
+
+function scrollFeedbackIntoView() {
+  requestAnimationFrame(() => {
+    $('feedback').scrollIntoView({ behavior: 'smooth', block: 'end' });
+  });
+}
+
+function feedbackAnswer(response) {
+  return {
+    response,
+    comment: $('fb-comment').value,
+    priorTool: $('fb-priorTool').value,
+    downReason: $('fb-downReason').value,
+    email: $('fb-emailOk').checked ? $('fb-email').value : '',
+  };
+}
+
+// Show at most one prompt per popup session, inside the panel where the
+// action just happened.
+async function maybeShowFeedback(prompt, feature, panelId) {
+  if (!prompt || feedbackShownThisSession) return;
+  feedbackShownThisSession = true;
+  activeFeedback = { prompt, feature };
+  await Telemetry.markPromptShown(prompt, feature);
+  $('fb-question').textContent = FEEDBACK_QUESTIONS[prompt][feature];
+
+  // Reclaim preview height once the save is complete so feedback does not get
+  // pushed beneath Chrome's popup-height limit.
+  if (panelId === 'panel-save') $('save-options').open = false;
+  if (panelId === 'panel-save' && previewOpen) {
+    previewOpen = false;
+    $('preview-box').classList.remove('open');
+    $('preview-toggle').textContent = 'Show';
+  }
+
+  $(panelId).appendChild($('feedback'));
+  $('feedback').hidden = false;
+  scrollFeedbackIntoView();
+}
+
+function finishFeedback(showThanks) {
+  $('fb-body').hidden = true;
+  if (showThanks) {
+    $('fb-thanks').hidden = false;
+  } else {
+    $('feedback').hidden = true;
+  }
+}
+
+function setupFeedbackListeners() {
+  const pick = (response) => {
+    if (!activeFeedback) return;
+    feedbackResponse = response;
+    $('fb-up').classList.toggle('selected', response === 'up');
+    $('fb-down').classList.toggle('selected', response === 'down');
+    $('fb-more').hidden = false;
+    $('fb-down-only').hidden = response !== 'down';
+    $('fb-skip').hidden = true; // once a thumb is picked, Send is the way out
+    // Saved immediately so the thumb isn't lost if the popup closes.
+    Telemetry.saveDraft(activeFeedback.prompt, feedbackAnswer(response));
+    scrollFeedbackIntoView();
+  };
+  $('fb-up').addEventListener('click', () => pick('up'));
+  $('fb-down').addEventListener('click', () => pick('down'));
+
+  $('fb-emailOk').addEventListener('change', () => {
+    $('fb-email').hidden = !$('fb-emailOk').checked;
+    scrollFeedbackIntoView();
+  });
+
+  ['fb-comment', 'fb-priorTool', 'fb-downReason', 'fb-email', 'fb-emailOk'].forEach(id => {
+    $(id).addEventListener('change', () => {
+      if (activeFeedback && feedbackResponse) {
+        Telemetry.saveDraft(activeFeedback.prompt, feedbackAnswer(feedbackResponse));
+      }
+    });
+  });
+
+  $('fb-send').addEventListener('click', async () => {
+    if (!activeFeedback || !feedbackResponse) return;
+    await Telemetry.submit(activeFeedback.prompt, feedbackAnswer(feedbackResponse));
+    finishFeedback(true);
+  });
+
+  $('fb-skip').addEventListener('click', async () => {
+    if (!activeFeedback) return;
+    await Telemetry.submit(activeFeedback.prompt, { response: 'dismissed' });
+    finishFeedback(false);
+  });
+}
+
 // ── Init ──────────────────────────────────────────────────────────────────────
 
 document.addEventListener('DOMContentLoaded', async () => {
+  // Anonymous usage telemetry: sends any unreported prompt answers, retries the outbox.
+  Telemetry.init();
+  setupFeedbackListeners();
+
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
 
   // ── Tab routing — default to Outreach on LinkedIn profile pages ──
@@ -366,8 +506,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   const settings = await loadSettings();
   if (settings.defaultFolder) $('folder').value = settings.defaultFolder;
 
-  // Check Sheets auth
-  isSignedIn().then(updateSheetsUI).catch(() => updateSheetsUI(false));
+  // Show both auth state and the exact spreadsheet/tab destination.
+  refreshSheetsUI(settings);
 
   // Extract page content (blocked on chrome:// and extension pages)
   if (tab.url && !tab.url.startsWith('chrome://') && !tab.url.startsWith('chrome-extension://')) {
@@ -403,7 +543,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     $('btn-connect').textContent = 'Connecting...';
     try {
       await getAuthToken(true);
-      updateSheetsUI(true);
+      await refreshSheetsUI();
     } catch (e) {
       setStatus('save-status', 'Auth failed: ' + e.message, 'error');
       $('btn-connect').textContent = 'Connect';
@@ -438,14 +578,16 @@ document.addEventListener('DOMContentLoaded', async () => {
     setStatus('save-status', '');
 
     // Step 1 — MD download
+    let promptDue = null;
     setStep('step-md', 'active');
     try {
       await downloadFile(downloadPath, content);
       setStep('step-md', 'done');
+      promptDue = await Telemetry.recordUse('tracker');
     } catch (e) {
       setStep('step-md', 'error-step');
       setStatus('save-status', 'Download failed: ' + e.message, 'error');
-      btn.disabled = false; btn.textContent = '↓ Save & Log';
+      btn.disabled = false; btn.textContent = 'Save & Log';
       return;
     }
 
@@ -456,18 +598,20 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (!sheetsConnected) await getAuthToken(true);
         await logToSheets({ company, role, url: extractedData.url, status, fitLevel, overwrite });
         setStep('step-sheets', 'done');
-        updateSheetsUI(true);
+        Telemetry.recordSheetsLog();
+        refreshSheetsUI();
       } catch (e) {
         setStep('step-sheets', 'error-step');
         setStatus('save-status', 'Saved MD ✓ — Sheets failed: ' + e.message, 'error');
-        btn.disabled = false; btn.textContent = '↓ Save & Log';
+        btn.disabled = false; btn.textContent = 'Save & Log';
         return;
       }
     }
 
     btn.disabled = false;
-    btn.textContent = '↓ Save & Log';
+    btn.textContent = 'Save & Log';
     setStatus('save-status', '✓ Done — ' + filename, 'success');
+    maybeShowFeedback(promptDue, 'tracker', 'panel-save');
   });
 
   // ── Outreach tab listeners ──
@@ -518,6 +662,8 @@ document.addEventListener('DOMContentLoaded', async () => {
       setStatus('outreach-status', result.message, 'error');
     } else {
       setStatus('outreach-status', '✓ ' + result.message, 'success');
+      const promptDue = await Telemetry.recordUse('outreach');
+      maybeShowFeedback(promptDue, 'outreach', 'panel-outreach');
     }
   });
 
@@ -527,6 +673,10 @@ document.addEventListener('DOMContentLoaded', async () => {
   $('btn-clear-fill').addEventListener('click', () => clearAutofill(tab.id));
 
   // ── Settings tab listeners ──
+
+  document.querySelector('[data-tab="settings"]').addEventListener('click', () => {
+    Telemetry.markSettingsOpened();
+  });
 
   $('s-sheetId').addEventListener('change', async () => {
     const sheetId = extractSheetId($('s-sheetId').value);
@@ -540,6 +690,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   $('btn-save-profile').addEventListener('click', async () => {
     await saveProfileFromSettings();
+    // Setup counts as complete once at least one sheet + tab is configured.
+    const saved = await loadSettings();
+    if ((saved.sheetId && saved.tabName) || (saved.outreachSheetId && saved.outreachTabName)) {
+      Telemetry.markSetupCompleted();
+    }
+    refreshSheetsUI(saved);
     const indicator = $('save-indicator');
     indicator.classList.add('visible');
     setTimeout(() => indicator.classList.remove('visible'), 2000);
