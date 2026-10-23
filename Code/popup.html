@@ -3,12 +3,22 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>JDTracker</title>
+  <title>JobSearch Aide</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
+    html {
+      width: 380px;
+      height: 510px;
+      overflow: hidden;
+    }
+
     body {
       width: 380px;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
       background: #fff;
       color: #1a1a1a;
@@ -18,20 +28,10 @@
     .header {
       display: flex;
       align-items: center;
-      gap: 9px;
-      padding: 14px 16px 0;
+      padding: 12px 16px 0;
+      flex-shrink: 0;
     }
-
-    .logo {
-      width: 28px; height: 28px;
-      background: #1a5c4f;
-      border-radius: 7px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 14px; flex-shrink: 0;
-    }
-
-    .header h1 { font-size: 15px; font-weight: 600; color: #1a1a1a; }
-    .header .subtitle { font-size: 11px; color: #999; margin-top: 1px; }
+    .header h1 { font-size: 15px; font-weight: 650; color: #1a1a1a; letter-spacing: -0.01em; }
 
     /* ── Tabs ── */
     .tabs {
@@ -39,13 +39,14 @@
       gap: 0;
       padding: 10px 16px 0;
       border-bottom: 1px solid #efefef;
-      margin-top: 10px;
+      margin-top: 6px;
+      flex-shrink: 0;
     }
 
     .tab {
       font-size: 12px;
       font-weight: 500;
-      color: #999;
+      color: #666;
       padding: 6px 12px;
       cursor: pointer;
       border-bottom: 2px solid transparent;
@@ -62,8 +63,21 @@
     .tab.active { color: #1a5c4f; border-bottom-color: #1a5c4f; font-weight: 600; }
 
     /* ── Tab panels ── */
-    .panel { display: none; padding: 14px 16px; flex-direction: column; gap: 11px; }
-    .panel.active { display: flex; }
+    .panel {
+      display: none;
+      padding: 14px 16px 18px;
+      flex-direction: column;
+      gap: 11px;
+      min-height: 0;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      scroll-padding-bottom: 18px;
+    }
+    .panel.active { display: flex; flex: 1; }
+    .panel::-webkit-scrollbar { width: 6px; }
+    .panel::-webkit-scrollbar-track { background: transparent; }
+    .panel::-webkit-scrollbar-thumb { background: #d8dfdd; border-radius: 6px; }
+    .panel::-webkit-scrollbar-thumb:hover { background: #bcc9c5; }
 
     /* ── Fields ── */
     .field { display: flex; flex-direction: column; gap: 4px; }
@@ -71,8 +85,10 @@
     .field-row { display: flex; gap: 8px; }
     .field-row .field { flex: 1; }
 
+    .save-core-row .field { min-width: 0; }
+
     label {
-      font-size: 11px; font-weight: 500; color: #666;
+      font-size: 12px; font-weight: 500; color: #555;
       text-transform: uppercase; letter-spacing: 0.04em;
     }
 
@@ -98,7 +114,7 @@
       box-shadow: 0 0 0 3px rgba(26,92,79,0.08);
     }
 
-    input::placeholder { color: #bbb; }
+    input::placeholder { color: #737373; }
 
     select {
       appearance: none;
@@ -110,18 +126,18 @@
     }
 
     .section-title {
-      font-size: 10px;
+      font-size: 12px;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.08em;
-      color: #bbb;
+      color: #666;
       padding-top: 4px;
     }
 
     /* ── Filename preview ── */
     .filename-preview {
       border: 1px solid #e8f4f1; border-radius: 7px;
-      padding: 7px 10px; font-size: 11px; color: #1a5c4f;
+      padding: 7px 10px; font-size: 12px; color: #1a5c4f;
       font-family: 'SF Mono', 'Fira Code', monospace;
       word-break: break-all; background: #f5fbf9;
     }
@@ -130,7 +146,7 @@
     .preview-header { display: flex; align-items: center; justify-content: space-between; }
 
     .preview-toggle {
-      font-size: 11px; color: #1a5c4f; cursor: pointer;
+      font-size: 12px; color: #1a5c4f; cursor: pointer;
       background: none; border: none; padding: 0;
       font-family: inherit; font-weight: 500;
     }
@@ -150,17 +166,59 @@
 
     .preview-text {
       font-family: 'SF Mono', 'Fira Code', monospace;
-      font-size: 11px; line-height: 1.6; color: #444;
+      font-size: 12px; line-height: 1.6; color: #444;
       white-space: pre-wrap; word-break: break-word;
     }
     .preview-text .md-heading { color: #1a5c4f; font-weight: 600; }
-    .preview-text .md-frontmatter { color: #999; font-style: italic; }
-    .preview-text .md-bullet { color: #888; }
+    .preview-text .md-frontmatter { color: #6b7280; font-style: italic; }
+    .preview-text .md-bullet { color: #6b7280; }
 
     .preview-chars {
-      font-size: 10px; color: #aaa;
+      font-size: 12px; color: #555;
       padding: 5px 12px 7px;
       border-top: 1px solid #eee; background: #f5f5f5;
+    }
+
+    /* ── Save options disclosure ── */
+    .save-options {
+      border-top: 1px solid #edf1f0;
+      border-bottom: 1px solid #edf1f0;
+      padding: 8px;
+    }
+
+    .save-options summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 28px;
+      color: #36534d;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      list-style: none;
+      outline: none;
+    }
+
+    .save-options summary::-webkit-details-marker { display: none; }
+    .save-options summary::after {
+      content: '';
+      width: 7px;
+      height: 7px;
+      border-right: 1.5px solid #61736f;
+      border-bottom: 1.5px solid #61736f;
+      transform: rotate(45deg) translateY(-2px);
+      transition: transform 0.15s ease;
+    }
+    .save-options[open] summary::after { transform: rotate(225deg) translate(-2px, -2px); }
+    .save-options summary:focus-visible {
+      border-radius: 5px;
+      box-shadow: 0 0 0 3px rgba(26,92,79,0.12);
+    }
+    .save-options-body {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding: 8px 0 4px;
     }
 
     /* ── Sheets strip ── */
@@ -169,13 +227,20 @@
       background: #f5fbf9; border: 1px solid #d0ece6;
       border-radius: 8px; padding: 8px 11px;
     }
-    .sheets-strip-left { display: flex; align-items: center; gap: 7px; }
-    .sheets-icon { font-size: 14px; line-height: 1; }
+    .sheets-strip-left { display: flex; align-items: center; min-width: 0; flex: 1; }
     .sheets-label { font-size: 12px; font-weight: 500; color: #1a5c4f; }
-    .sheets-sublabel { font-size: 10px; color: #888; margin-top: 1px; }
+    .sheets-sublabel {
+      max-width: 220px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-size: 12px;
+      color: #51615d;
+      margin-top: 1px;
+    }
 
     .btn-connect {
-      font-size: 11px; font-weight: 600; color: #fff;
+      font-size: 12px; font-weight: 600; color: #fff;
       background: #1a5c4f; border: none; border-radius: 5px;
       padding: 5px 10px; cursor: pointer; font-family: inherit;
       transition: background 0.15s; white-space: nowrap;
@@ -235,7 +300,7 @@
     }
     .legend-item {
       display: flex; align-items: center; gap: 5px;
-      font-size: 11px; color: #666;
+      font-size: 12px; color: #555;
     }
     .legend-dot {
       width: 10px; height: 10px; border-radius: 2px;
@@ -254,7 +319,7 @@
 
     /* ── Steps ── */
     .steps { display: flex; flex-direction: column; gap: 3px; }
-    .step { display: flex; align-items: center; gap: 6px; font-size: 11px; color: #aaa; }
+    .step { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #555; }
     .step .dot { width: 6px; height: 6px; border-radius: 50%; background: #e0e0e0; flex-shrink: 0; }
     .step.done .dot { background: #1a5c4f; }
     .step.done { color: #1a5c4f; }
@@ -265,24 +330,24 @@
     @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.3; } }
 
     /* ── Status ── */
-    .status { font-size: 12px; text-align: center; min-height: 16px; color: #aaa; }
+    .status { font-size: 12px; text-align: center; min-height: 16px; color: #666; }
     .status.success { color: #1a5c4f; font-weight: 500; }
     .status.error   { color: #dc2626; }
 
     /* ── Settings ── */
     .settings-note {
-      font-size: 11px; color: #888; line-height: 1.5;
+      font-size: 12px; color: #666; line-height: 1.5;
       background: #f9f9f9; border-radius: 7px; padding: 9px 11px;
     }
 
     .save-indicator {
-      font-size: 11px; color: #1a5c4f; text-align: right;
+      font-size: 12px; color: #1a5c4f; text-align: right;
       min-height: 16px; opacity: 0; transition: opacity 0.3s;
     }
     .save-indicator.visible { opacity: 1; }
 
     /* ── Spinner ── */
-    .extracting { text-align: center; padding: 28px 0 20px; color: #aaa; font-size: 13px; }
+    .extracting { text-align: center; padding: 28px 0 20px; color: #666; font-size: 13px; }
     .spinner {
       width: 18px; height: 18px;
       border: 2px solid #e0e0e0; border-top-color: #1a5c4f;
@@ -291,24 +356,38 @@
     }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    .hint { font-size: 11px; color: #aaa; margin-top: 2px; }
+    .hint { font-size: 12px; color: #555; margin-top: 2px; }
+    /* ── Feedback prompt ── */
+    .feedback { margin-top: 4px; padding: 10px; border: 1px solid #e3ece9; background: #f6faf9; border-radius: 8px; font-size: 12px; flex-shrink: 0; }
+    .feedback[hidden], .feedback [hidden] { display: none !important; }
+    .fb-question { font-weight: 600; color: #1a1a1a; margin-bottom: 6px; }
+    .fb-thumbs { display: flex; gap: 8px; margin-bottom: 2px; }
+    .fb-thumb { font-size: 17px; line-height: 1; padding: 5px 13px; border: 1px solid #d7e3df; background: #fff; border-radius: 6px; cursor: pointer; }
+    .fb-thumb:hover { border-color: #1a5c4f; }
+    .fb-thumb.selected { border-color: #1a5c4f; background: #e3f0ec; }
+    .fb-more { display: flex; flex-direction: column; gap: 6px; margin-top: 6px; }
+    .fb-more label { display: flex; flex-direction: column; gap: 4px; color: #555; font-size: 12px; }
+    .fb-more label span { color: #666; }
+    .fb-more select, .fb-more textarea, .fb-more input[type="email"] { font-family: inherit; font-size: 12px; padding: 6px 8px; border: 1px solid #ddd; border-radius: 6px; background: #fff; }
+    .fb-more textarea { resize: vertical; }
+    .fb-more .fb-check { flex-direction: row; align-items: center; gap: 6px; }
+    .fb-down-only { display: flex; flex-direction: column; gap: 6px; }
+    .fb-footer { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-top: 6px; color: #555; font-size: 12px; }
+    .fb-skip { background: none; border: none; color: #666; font-size: 12px; cursor: pointer; font-family: inherit; text-decoration: underline; }
+    .fb-thanks { color: #1a5c4f; font-weight: 600; }
   </style>
 </head>
 <body>
 
   <div class="header">
-    <div class="logo">📄</div>
-    <div>
-      <h1>JDTracker</h1>
-      <div class="subtitle">Job search toolkit</div>
-    </div>
+    <h1>JobSearch Aide</h1>
   </div>
 
   <!-- Tabs -->
   <div class="tabs">
     <button class="tab active" data-tab="save">Save JD</button>
     <button class="tab" data-tab="outreach">Outreach</button>
-    <button class="tab" data-tab="autofill">Autofill <span style="font-size:9px;font-weight:700;color:#f59e0b;vertical-align:middle">BETA</span></button>
+    <button class="tab" data-tab="autofill">Autofill <span style="font-size:11px;font-weight:700;color:#946200;vertical-align:middle">BETA</span></button>
     <button class="tab" data-tab="settings">Settings</button>
   </div>
 
@@ -324,48 +403,50 @@
 
     <div id="save-form" style="display:contents">
 
-      <div class="field">
-        <label>Company</label>
-        <input type="text" id="company" placeholder="e.g. Stripe" />
-      </div>
-
-      <div class="field">
-        <label>Job Title</label>
-        <input type="text" id="role" placeholder="e.g. Senior Engineer" />
-      </div>
-
-      <div class="field">
-        <label>Filename</label>
-        <div class="filename-preview" id="filename-preview">—</div>
-      </div>
-
-      <div class="field">
-        <div class="preview-header">
-          <label>Content Preview</label>
-          <button class="preview-toggle" id="preview-toggle">Show</button>
+      <div class="field-row save-core-row">
+        <div class="field">
+          <label>Company</label>
+          <input type="text" id="company" placeholder="e.g. Stripe" />
         </div>
-        <div class="preview-box" id="preview-box">
-          <div class="preview-scroll">
-            <div class="preview-text" id="preview-text"></div>
+        <div class="field">
+          <label>Job Title</label>
+          <input type="text" id="role" placeholder="e.g. Senior Engineer" />
+        </div>
+      </div>
+
+      <!-- Markdown file -->
+      <details class="save-options" id="save-options">
+        <summary>Markdown file &amp; preview</summary>
+        <div class="save-options-body">
+          <div class="field">
+            <label>Filename</label>
+            <div class="filename-preview" id="filename-preview">—</div>
           </div>
-          <div class="preview-chars" id="preview-chars"></div>
+
+          <div class="field">
+            <div class="preview-header">
+              <label>Content Preview</label>
+              <button class="preview-toggle" id="preview-toggle" type="button">Show</button>
+            </div>
+            <div class="preview-box" id="preview-box">
+              <div class="preview-scroll">
+                <div class="preview-text" id="preview-text"></div>
+              </div>
+              <div class="preview-chars" id="preview-chars"></div>
+            </div>
+          </div>
+
+          <div class="field">
+            <label>Save Folder</label>
+            <input type="text" id="folder" placeholder="e.g. Jobs or Jobs/2026" />
+            <div class="hint">Subfolder inside your Downloads folder</div>
+          </div>
         </div>
-      </div>
+      </details>
 
-      <div class="divider"></div>
-
-      <div class="field">
-        <label>Save Folder</label>
-        <input type="text" id="folder" placeholder="e.g. Jobs or Jobs/2026" />
-        <div class="hint">Subfolder inside your Downloads folder</div>
-      </div>
-
-      <div class="divider"></div>
-
-      <!-- Sheets -->
+      <!-- Google Sheets -->
       <div class="sheets-strip">
         <div class="sheets-strip-left">
-          <div class="sheets-icon">📊</div>
           <div>
             <div class="sheets-label">Google Sheets</div>
             <div class="sheets-sublabel" id="sheets-sublabel">Not connected</div>
@@ -374,21 +455,22 @@
         <button class="btn-connect" id="btn-connect">Connect</button>
       </div>
 
-      <div class="field">
-        <label>Fit Level (1-10)</label>
-        <input type="text" id="fit-level" placeholder="e.g. 8" maxlength="2" />
-      </div>
-
-      <div class="field">
-        <label>Status</label>
-        <select id="status-select">
-          <option value="Applied">Applied</option>
-          <option value="Bookmarked">Bookmarked</option>
-          <option value="Interviewing">Interviewing</option>
-          <option value="Offer">Offer</option>
-          <option value="Rejected">Rejected</option>
-          <option value="Not Applying">Not Applying</option>
-        </select>
+      <div class="field-row save-core-row">
+        <div class="field">
+          <label>Fit (1-10)</label>
+          <input type="text" id="fit-level" placeholder="e.g. 8" maxlength="2" />
+        </div>
+        <div class="field">
+          <label>Status</label>
+          <select id="status-select">
+            <option value="Applied">Applied</option>
+            <option value="Bookmarked">Bookmarked</option>
+            <option value="Interviewing">Interviewing</option>
+            <option value="Offer">Offer</option>
+            <option value="Rejected">Rejected</option>
+            <option value="Not Applying">Not Applying</option>
+          </select>
+        </div>
       </div>
 
       <div class="toggle-row">
@@ -411,9 +493,7 @@
         </label>
       </div>
 
-      <div class="divider"></div>
-
-      <button class="btn-primary" id="btn-save">↓ Save & Log</button>
+      <button class="btn-primary" id="btn-save">Save &amp; Log</button>
 
       <div class="steps" id="steps" style="display:none">
         <div class="step" id="step-md"><div class="dot"></div><span>Save markdown file</span></div>
@@ -729,7 +809,52 @@
 
   </div>
 
+  <!-- Feedback prompt: moved into the active panel when shown (see popup.js). -->
+  <div class="feedback" id="feedback" hidden>
+    <div id="fb-body">
+      <div class="fb-question" id="fb-question">Is this useful so far?</div>
+      <div class="fb-thumbs">
+        <button class="fb-thumb" id="fb-up" type="button" aria-label="Yes, useful">👍</button>
+        <button class="fb-thumb" id="fb-down" type="button" aria-label="Not really">👎</button>
+      </div>
+      <div class="fb-more" id="fb-more" hidden>
+        <div class="fb-down-only" id="fb-down-only" hidden>
+          <label>Main reason?
+            <select id="fb-downReason">
+              <option value="">Choose one (optional)</option>
+              <option value="lowVolume">I don't apply to enough jobs to need this</option>
+              <option value="effort">Too much effort per job</option>
+              <option value="missing">Missing something I need</option>
+              <option value="other">Other</option>
+            </select>
+          </label>
+          <label>What were you using before?
+            <select id="fb-priorTool">
+              <option value="">Choose one (optional)</option>
+              <option value="nothing">Nothing</option>
+              <option value="spreadsheet">A spreadsheet</option>
+              <option value="app">Another app</option>
+              <option value="other">Other</option>
+            </select>
+          </label>
+        </div>
+        <label>What would make it better? <span>(optional)</span>
+          <textarea id="fb-comment" maxlength="280" rows="2"></textarea>
+        </label>
+        <label class="fb-check"><input type="checkbox" id="fb-emailOk"> OK to email me about this</label>
+        <input type="email" id="fb-email" placeholder="you@example.com" maxlength="120" hidden>
+        <button class="btn-primary" id="fb-send" type="button">Send</button>
+      </div>
+      <div class="fb-footer">
+        <span>Sends anonymous usage counts, never your job or contact data.</span>
+        <button class="fb-skip" id="fb-skip" type="button">Not now</button>
+      </div>
+    </div>
+    <div class="fb-thanks" id="fb-thanks" hidden>Thanks, that really helps.</div>
+  </div>
+
   <script src="storage.js"></script>
+  <script src="telemetry.js"></script>
   <script src="sheets.js"></script>
   <script src="outreach.js"></script>
   <script src="popup.js"></script>

@@ -160,16 +160,24 @@ async function revokeToken(token) {
   });
 }
 
-async function fetchSheetTabs(sheetId) {
+async function fetchSheetMetadata(sheetId) {
   const token = await getAuthToken(false).catch(() => null);
-  if (!token) return [];
+  if (!token) return null;
   const res = await fetch(
-    `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}?fields=sheets.properties.title`,
+    `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}?fields=properties.title,sheets.properties.title`,
     { headers: { 'Authorization': `Bearer ${token}` } }
   );
-  if (!res.ok) return [];
+  if (!res.ok) return null;
   const data = await res.json();
-  return (data.sheets || []).map(s => s.properties.title);
+  return {
+    title: data.properties?.title || '',
+    tabs: (data.sheets || []).map(s => s.properties.title),
+  };
+}
+
+async function fetchSheetTabs(sheetId) {
+  const metadata = await fetchSheetMetadata(sheetId);
+  return metadata?.tabs || [];
 }
 
 async function isSignedIn() {

@@ -1,21 +1,53 @@
 // content.js - Extracts page content and converts to clean markdown
 
-function extractJsonLdContent() {
-  const scripts = document.querySelectorAll('script[type="application/ld+json"]');
-  for (const script of scripts) {
+function extractJobPostings() {
+  const jobs = [];
+
+  function collect(value) {
+    if (Array.isArray(value)) {
+      value.forEach(collect);
+      return;
+    }
+
+    if (!value || typeof value !== 'object') return;
+
+    const types = Array.isArray(value['@type']) ? value['@type'] : [value['@type']];
+    if (types.includes('JobPosting')) jobs.push(value);
+
+    // JSON-LD commonly wraps entities in an @graph array.
+    if (value['@graph']) collect(value['@graph']);
+  }
+
+  for (const script of document.querySelectorAll('script[type="application/ld+json"]')) {
     try {
-      const data = JSON.parse(script.textContent);
-      const job = Array.isArray(data)
-        ? data.find(d => d['@type'] === 'JobPosting')
-        : (data['@type'] === 'JobPosting' ? data : null);
-      if (job?.description) {
-        const tmp = document.createElement('div');
-        tmp.innerHTML = job.description;
-        return htmlToMarkdown(tmp);
-      }
+      collect(JSON.parse(script.textContent));
     } catch (e) {}
   }
-  return null;
+
+  return jobs;
+}
+
+function extractJsonLdContent(jobs = extractJobPostings()) {
+  let bestMarkdown = '';
+  let bestScore = 0;
+
+  for (const job of jobs) {
+    if (!job?.description) continue;
+
+    const tmp = document.createElement('div');
+    tmp.innerHTML = job.description;
+    const markdown = htmlToMarkdown(tmp).trim();
+    const score = markdown.replace(/\s/g, '').length;
+
+    // Some sites publish multiple JobPosting blocks. Keep the most complete
+    // description instead of accepting whichever block happens to come first.
+    if (score > bestScore) {
+      bestMarkdown = markdown;
+      bestScore = score;
+    }
+  }
+
+  return bestMarkdown || null;
 }
 
 function extractPageContent() {
@@ -26,7 +58,7 @@ function extractPageContent() {
   const extracted = extractCompanyAndRole();
 
   // --- Try JSON-LD description first (server-rendered, works on JS-heavy ATS sites) ---
-  const jsonLdMarkdown = extractJsonLdContent();
+  const jsonLdMarkdown = extractJsonLdContent(extracted.jobs);
   if (jsonLdMarkdown && jsonLdMarkdown.length > 100) {
     return { url, title, company: extracted.company, role: extracted.role, markdown: jsonLdMarkdown.trim() };
   }
@@ -98,7 +130,7 @@ function extractPageContent() {
 function extractCompanyAndRole() {
   const title = document.title;
   const h1 = document.querySelector('h1');
-  const h2 = document.querySelector('h2');
+  const jobs = extractJobPostings();
 
   let company = '';
   let role = '';
@@ -108,19 +140,40 @@ function extractCompanyAndRole() {
     document.querySelector('meta[property="og:site_name"]')?.content ||
     document.querySelector('meta[name="author"]')?.content || '';
 
-  // Try structured data
-  for (const script of document.querySelectorAll('script[type="application/ld+json"]')) {
-    try {
-      const data = JSON.parse(script.textContent);
-      const job = Array.isArray(data)
-        ? data.find(d => d['@type'] === 'JobPosting')
-        : (data['@type'] === 'JobPosting' ? data : null);
-      if (job) {
-        role = job.title || '';
-        company = job.hiringOrganization?.name || '';
-        break;
-      }
-    } catch (e) {}
+  // Prefer the structured posting whose title matches the visible page heading.
+  // Sites sometimes publish an internal requisition title before the public one.
+  const headingCandidates = Array.from(document.querySelectorAll('h1, h2'))
+    .map(heading => heading.innerText.trim())
+    .filter(Boolean);
+  const normalizeTitle = value => (value || '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, ' ')
+    .trim();
+  let matchingJob = null;
+  let visibleRole = '';
+
+  for (const heading of headingCandidates) {
+    const normalizedHeading = normalizeTitle(heading);
+    matchingJob = jobs.find(job => {
+      const structuredTitle = normalizeTitle(job.title);
+      return structuredTitle && (
+        structuredTitle === normalizedHeading ||
+        structuredTitle.includes(normalizedHeading) ||
+        normalizedHeading.includes(structuredTitle)
+      );
+    }) || null;
+
+    if (matchingJob) {
+      visibleRole = heading;
+      break;
+    }
+  }
+
+  const preferredJob = matchingJob || jobs[0];
+
+  if (preferredJob) {
+    role = matchingJob ? visibleRole : (preferredJob.title || '');
+    company = preferredJob.hiringOrganization?.name || '';
   }
 
   // Known ATS patterns
@@ -188,7 +241,7 @@ function extractCompanyAndRole() {
   company = sanitizeFilename(company || 'Unknown-Company');
   role = sanitizeFilename(role || 'Unknown-Role');
 
-  return { company, role };
+  return { company, role, jobs };
 }
 
 function sanitizeFilename(str) {
@@ -203,6 +256,47 @@ function sanitizeFilename(str) {
 
 function htmlToMarkdown(el) {
   let md = '';
+
+  function processList(listNode, depth) {
+    const lines = [];
+    const ordered = listNode.tagName.toLowerCase() === 'ol';
+    let itemNumber = 0;
+
+    for (const child of Array.from(listNode.children)) {
+      const childTag = child.tagName.toLowerCase();
+
+      if (childTag === 'li') {
+        itemNumber += 1;
+        const itemText = Array.from(child.childNodes)
+          .filter(node => !(
+            node.nodeType === Node.ELEMENT_NODE &&
+            ['ul', 'ol'].includes(node.tagName.toLowerCase())
+          ))
+          .map(node => processNode(node, depth + 1))
+          .join('')
+          .replace(/\s+/g, ' ')
+          .trim();
+
+        if (itemText) {
+          const marker = ordered ? `${itemNumber}.` : '-';
+          lines.push(`${'  '.repeat(depth)}${marker} ${itemText}`);
+        }
+
+        // Handle valid nested lists placed inside an li.
+        for (const nestedList of child.querySelectorAll(':scope > ul, :scope > ol')) {
+          const nested = processList(nestedList, depth + 1);
+          if (nested) lines.push(nested);
+        }
+      } else if (childTag === 'ul' || childTag === 'ol') {
+        // Also handle malformed but common ATS markup where a nested list is a
+        // sibling of its parent li (Deloitte's job data uses this structure).
+        const nested = processList(child, depth + 1);
+        if (nested) lines.push(nested);
+      }
+    }
+
+    return lines.join('\n');
+  }
 
   function processNode(node, depth = 0) {
     if (node.nodeType === Node.TEXT_NODE) {
@@ -236,17 +330,9 @@ function htmlToMarkdown(el) {
         const text = children().trim();
         return href ? `[${text}](${href})` : text;
       }
-      case 'ul': {
-        return '\n' + Array.from(node.querySelectorAll(':scope > li'))
-          .map(li => `- ${li.innerText.trim().replace(/\n/g, ' ')}`)
-          .join('\n') + '\n';
-      }
-      case 'ol': {
-        return '\n' + Array.from(node.querySelectorAll(':scope > li'))
-          .map((li, i) => `${i + 1}. ${li.innerText.trim().replace(/\n/g, ' ')}`)
-          .join('\n') + '\n';
-      }
-      case 'li': return ''; // handled by ul/ol
+      case 'ul':
+      case 'ol': return `\n${processList(node, depth)}\n`;
+      case 'li': return children(); // normally handled by the parent list
       case 'table': {
         const rows = Array.from(node.querySelectorAll('tr'));
         if (!rows.length) return '';

@@ -1,9 +1,14 @@
+# OS
 .DS_Store
 **/.DS_Store
-.superpowers/
-chrome-extension-spreadsheet-prd.md
-jd-saver-test-plan.md
-jd-saver-guide.html
+
+# Internal docs (PRD, test plan, plans, archive) — never public
 docs/
+.superpowers/
 Code/CLAUDE.md
-README\ (3).md
+
+# Local draft until it's cleaned up for public use
+Setup Instructions.md
+
+# Build artifacts — rebuild the store zip right before uploading
+*.zip
