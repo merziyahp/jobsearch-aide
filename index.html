@@ -4,72 +4,190 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>JobSearch Aide — AI-ready job search, in your own Google Sheet</title>
-  <meta name="description" content="One click saves any job listing to your Google Sheet and downloads an AI-ready copy of the job description. Stop copy-pasting.">
+  <meta name="description" content="Save job listings and networking outreach to Google Sheets while keeping an AI-ready copy of every job description.">
   <link rel="icon" type="image/png" href="assets/icon128.png">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=setup-sequence-6">
+  <script src="site.js" defer></script>
 </head>
 <body>
+  <a class="skip-link" href="#main-content">Skip to content</a>
 
-  <nav>
+  <nav class="site-nav" aria-label="Primary navigation">
     <a class="nav-brand" href="index.html">
-      <img src="assets/icon128.png" alt="JobSearch Aide icon">
+      <img src="assets/icon128.png" alt="">
       <span>JobSearch Aide</span>
     </a>
-    <a class="nav-link" href="privacy.html">Privacy Policy</a>
+    <div class="nav-actions">
+      <a class="nav-link" href="setup.html">Setup</a>
+      <a class="nav-link" href="privacy.html">Privacy</a>
+    </div>
   </nav>
 
-  <section class="hero">
-    <h1>Stop copy-pasting job descriptions.</h1>
-    <p>One click saves any job listing to your Google Sheet and downloads an AI-ready copy — ready to paste into ChatGPT or Claude.</p>
-    <form class="waitlist-form" action="https://formspree.io/f/mgoqlnlb" method="POST">
-      <input type="email" name="email" placeholder="your@email.com" required>
-      <button type="submit">Get early access</button>
-    </form>
-    <p class="hero-meta">Chrome extension &middot; Free &middot; Works with your Google account</p>
-  </section>
+  <main id="main-content">
+    <section class="hero">
+      <div class="hero-layout">
+        <div class="hero-copy" data-reveal>
+          <h1>Save jobs without copy-paste.</h1>
+          <p>One click saves any job listing to your Google Sheet and downloads an AI-ready copy, ready to paste into ChatGPT or Claude.</p>
+          <form class="waitlist-form" action="https://formspree.io/f/mgoqlnlb" method="POST">
+            <label class="sr-only" for="waitlist-email">Email address</label>
+            <input id="waitlist-email" type="email" name="email" placeholder="your@email.com" autocomplete="email" required>
+            <button type="submit">Get early access</button>
+          </form>
+          <p class="hero-meta">Chrome extension · Preparing for Chrome Web Store release</p>
+        </div>
 
-  <section class="problem">
-    <h2>Every application, the same four steps.</h2>
-    <div class="steps">
-      <div class="step">Find the job listing</div>
-      <span class="step-arrow">&#8594;</span>
-      <div class="step">Copy the description</div>
-      <span class="step-arrow">&#8594;</span>
-      <div class="step">Log it in your tracker</div>
-      <span class="step-arrow">&#8594;</span>
-      <div class="step">Paste into your AI tool</div>
-    </div>
-    <p class="problem-conclusion">JobSearch Aide gets it down to one.</p>
-  </section>
+        <div class="sheet-preview" data-ui data-reveal aria-label="Preview of a job application tracker">
+          <div class="ui-titlebar">
+            <strong>Job applications</strong>
+            <span>Saved to your sheet</span>
+          </div>
+          <div class="job-grid" role="table" aria-label="Sample job records">
+            <div class="job-grid-head" role="row">
+              <span role="columnheader">Company</span>
+              <span role="columnheader">Role</span>
+              <span role="columnheader">Status</span>
+              <span role="columnheader">Fit</span>
+            </div>
+            <div class="job-grid-row" role="row">
+              <span role="cell">Northfield Labs</span>
+              <span role="cell">Product Designer</span>
+              <span role="cell" class="status-cell">Applied</span>
+              <span role="cell">9</span>
+            </div>
+            <div class="job-grid-row" role="row">
+              <span role="cell">Blue Harbor Co</span>
+              <span role="cell">Operations Analyst</span>
+              <span role="cell">Bookmarked</span>
+              <span role="cell">8</span>
+            </div>
+            <div class="job-grid-row" role="row">
+              <span role="cell">Meridian Health</span>
+              <span role="cell">Research Lead</span>
+              <span role="cell">Interviewing</span>
+              <span role="cell">9</span>
+            </div>
+          </div>
+          <div class="file-output" data-ui>
+            <span>Also downloaded</span>
+            <strong>Northfield-Labs_Product-Designer_2026-10-22.md</strong>
+          </div>
+        </div>
+      </div>
+    </section>
 
-  <section class="features">
-    <h2>Everything in one click.</h2>
-    <div class="feature-cards">
-      <div class="feature-card">
-        <div class="feature-check">&#10003;</div>
-        <h3>Save to Google Sheets</h3>
-        <p>Company, role, link, and status logged automatically in a spreadsheet you own — not locked in someone else's app.</p>
+    <section class="problem" aria-labelledby="problem-title">
+      <div class="section-inner">
+        <h2 id="problem-title" data-reveal>Every application, the same four steps.</h2>
+        <div class="steps" role="list" data-reveal>
+          <div class="step" role="listitem">Find the job listing</div>
+          <span class="step-arrow" aria-hidden="true">→</span>
+          <div class="step" role="listitem">Save the job description</div>
+          <span class="step-arrow" aria-hidden="true">→</span>
+          <div class="step" role="listitem">Log it in your tracker</div>
+          <span class="step-arrow" aria-hidden="true">→</span>
+          <div class="step" role="listitem">Paste it into your AI tool</div>
+        </div>
+        <p class="problem-conclusion" data-reveal>JobSearch Aide gets it down to one.</p>
       </div>
-      <div class="feature-card">
-        <div class="feature-check">&#10003;</div>
-        <h3>AI-ready job description</h3>
-        <p>Downloads a clean text file of the job listing. Paste it straight into ChatGPT or Claude — no reformatting needed.</p>
+    </section>
+
+    <section class="features" aria-labelledby="features-title">
+      <div class="section-inner">
+        <h2 id="features-title" data-reveal>Click once. Capture all details needed for the application.</h2>
+        <div class="feature-ledger">
+          <article data-reveal>
+            <h3>Your tracker stays yours.</h3>
+            <p>Company, role, link, fit, and status go straight to a Google Sheet you control.</p>
+            <div class="mini-ui" data-ui data-reveal>
+              <strong>Google Sheets</strong>
+              <span>Job Applications · Connected</span>
+            </div>
+          </article>
+          <article data-reveal>
+            <h3>Job descriptions for every application, saved.</h3>
+            <p>A clean Markdown copy is saved locally for tailoring applications and preparing for interviews.</p>
+            <div class="mini-ui" data-ui data-reveal>
+              <strong>Markdown saved</strong>
+              <span>Product-Designer_2026-10-22.md</span>
+            </div>
+          </article>
+          <article data-reveal>
+            <h3>Duplicate links stay manageable.</h3>
+            <p>Choose whether to add a new record or overwrite the existing row matched by the job URL.</p>
+            <div class="mini-ui mini-toggle" data-ui data-reveal>
+              <strong>Overwrite existing record</strong>
+              <span aria-hidden="true"></span>
+            </div>
+          </article>
+        </div>
+        <figure class="tracker-preview" data-reveal>
+          <img src="assets/job-application-tracker-preview.png" alt="Sample job application tracker with company, role, status, fit, and next-step columns">
+          <figcaption>The starter tracker already follows the extension’s required column order.</figcaption>
+        </figure>
       </div>
-      <div class="feature-card">
-        <div class="feature-check">&#10003;</div>
-        <h3>Track outreach</h3>
-        <p>Log contacts from LinkedIn and get follow-up dates filled automatically with the free Google Sheets template.</p>
+    </section>
+
+    <section class="networking" aria-labelledby="networking-title">
+      <div class="networking-layout section-inner">
+        <div class="networking-copy" data-reveal>
+          <h2 id="networking-title">Track your outreach, too.</h2>
+          <p>Applications are only part of a job search. Networking is the bigger deal. On a LinkedIn profile, JobSearch Aide opens the outreach flow and captures the contact’s name and profile link so you can log the relationship without another round of copy-paste.</p>
+          <ul class="networking-points">
+            <li>Keep company, role, connection source, and status together.</li>
+            <li>Update supported outreach stages without duplicating contacts.</li>
+            <li>Record the last follow-up date when a request or message is sent.</li>
+          </ul>
+          <a class="text-link" href="setup.html#networking-template">Set up the networking tracker</a>
+        </div>
+
+        <div class="outreach-demo" data-reveal>
+          <div class="contact-capture" data-ui aria-label="Outreach contact capture preview">
+            <div class="ui-titlebar">
+              <strong>Outreach</strong>
+              <span>LinkedIn profile detected</span>
+            </div>
+            <dl class="capture-fields">
+              <div><dt>Contact</dt><dd>Jordan Lee</dd></div>
+              <div><dt>Company</dt><dd>Acme Corp</dd></div>
+              <div><dt>How connected</dt><dd>Alumni network</dd></div>
+              <div><dt>Status</dt><dd>Pending 3B</dd></div>
+            </dl>
+          </div>
+          <div class="followup-queue" data-ui aria-label="Networking follow-up queue preview">
+            <div class="queue-heading">
+              <strong>Follow-up queue</strong>
+              <span>Last contact</span>
+            </div>
+            <div class="queue-row"><span>Jordan Lee</span><time datetime="2026-10-22">Today</time></div>
+            <div class="queue-row"><span>Riley Chen</span><time datetime="2026-10-20">Oct 20</time></div>
+            <div class="queue-row"><span>Sam Patel</span><time datetime="2026-10-17">Oct 17</time></div>
+          </div>
+        </div>
+        <figure class="tracker-preview networking-preview" data-reveal>
+          <img src="assets/networking-outreach-tracker-preview.png" alt="Sample networking tracker with contact, LinkedIn URL, outreach status, and follow-up columns">
+          <figcaption>The outreach tracker keeps contact context and follow-up dates in one view.</figcaption>
+        </figure>
       </div>
-    </div>
-  </section>
+    </section>
+
+    <section class="setup-callout" aria-labelledby="setup-title">
+      <div class="setup-callout-inner" data-reveal>
+        <h2 id="setup-title">Start with the right columns.</h2>
+        <p>Copy the two-tab Google Sheets template, then connect it from the extension settings.</p>
+        <a class="button-link" href="setup.html">Open setup instructions</a>
+      </div>
+    </section>
+  </main>
 
   <footer>
-    <span>JobSearch Aide &middot; A Chrome extension for organized job seekers</span>
+    <span>JobSearch Aide · A Chrome extension for organized job seekers</span>
     <div class="footer-links">
-      <a href="privacy.html">Privacy Policy</a>
-      <a href="mailto:merziyahpoonawala@gmail.com">Contact</a>
+      <a href="setup.html">Setup</a>
+      <a href="privacy.html">Privacy</a>
+      <a href="support.html">Support</a>
+      <a href="mailto:mfpbuilds@gmail.com">Contact</a>
     </div>
   </footer>
-
 </body>
 </html>
