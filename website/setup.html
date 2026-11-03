@@ -3,10 +3,10 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Setup — JobSearch Aide</title>
-  <meta name="description" content="Download the sample job and networking trackers, upload them to Google Sheets, and connect JobSearch Aide.">
+  <title>Setup your JobAide tracker</title>
+  <meta name="description" content="Set up your JobAide tracker: get the extension, copy your spreadsheet, connect it, and optionally add a profile for beta form filling.">
   <link rel="icon" type="image/png" href="assets/icon128.png">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=setup-sequence-6">
   <script src="site.js" defer></script>
 </head>
 <body>
@@ -26,91 +26,51 @@
   <main id="main-content" class="setup-page">
     <header class="setup-hero">
       <div data-reveal>
-        <h1>Set up your sheets.</h1>
-        <p>JobSearch Aide writes to Google Sheets using a fixed column order. These starter files already match it.</p>
+        <h1>Setup your JobAide tracker</h1>
+        <p>Follow the steps below to connect your spreadsheet and start tracking your job search.</p>
       </div>
     </header>
 
-    <section class="downloads section-inner" aria-labelledby="downloads-title">
-      <h2 id="downloads-title" data-reveal>Download your starter files.</h2>
-      <p class="section-intro" data-reveal>Use either tracker or both. Each workbook contains a few example rows so you can see the intended layout; delete those rows whenever you are ready.</p>
+    <section class="setup-steps" aria-label="Tracker setup steps">
+      <ol class="instruction-list section-inner">
+        <li id="get-extension">
+          <div class="step-number">Step 1</div>
+          <div class="step-content" data-reveal>
+            <h2>Get the extension</h2>
+            <p>Installation instructions are coming soon.</p>
+          </div>
+        </li>
+        <li id="tracker-spreadsheet" class="downloads">
+          <div class="step-number">Step 2</div>
+          <div class="step-content">
+            <h2 data-reveal>Set up your tracker spreadsheet</h2>
+            <p data-reveal>Make your own copy of the Google Sheets template. It includes a Job Applications tab and a Networking Outreach tab.</p>
+      <div class="template-actions" data-reveal>
+        <a class="button-link" href="https://docs.google.com/spreadsheets/d/1jvRzXRyUpIk8plrA1yyYVDtGTVayHLecvof40AJyTio/copy" target="_blank" rel="noopener">Make a copy in Google Sheets</a>
+      </div>
 
       <div class="download-list">
-        <article class="download-row" data-ui data-reveal>
+        <article class="download-row tracker-tab-row" data-ui data-reveal>
           <div>
-            <h3>Job application tracker</h3>
+            <h3>Job Applications tab</h3>
             <p>Fourteen columns for the job link, application status, fit, materials used, and next steps.</p>
           </div>
           <img class="download-preview" src="assets/job-application-tracker-preview.png" alt="Preview of the job application tracker workbook">
-          <a class="button-link" href="assets/samples/job-application-tracker.xlsx" download>Download Excel file</a>
         </article>
 
-        <article class="download-row" id="networking-template" data-ui data-reveal>
+        <article class="download-row tracker-tab-row" id="networking-template" data-ui data-reveal>
           <div>
-            <h3>Networking outreach tracker</h3>
+            <h3>Networking Outreach tab</h3>
             <p>Fourteen columns for LinkedIn contacts, connection source, outreach status, dates, and notes.</p>
           </div>
           <img class="download-preview" src="assets/networking-outreach-tracker-preview.png" alt="Preview of the networking outreach tracker workbook">
-          <a class="button-link" href="assets/samples/networking-outreach-tracker.xlsx" download>Download Excel file</a>
         </article>
       </div>
 
-      <p class="file-note" data-reveal>These are Excel starter files, but the extension writes to Google Sheets. Upload each file to Google Drive and open it with Google Sheets before connecting it.</p>
-      <div class="setup-ui-pair">
-        <div class="setup-ui-block" data-ui data-reveal>
-          <strong>Job Applications</strong>
-          <span>Sheet URL</span>
-          <div>docs.google.com/spreadsheets/…</div>
-          <span>Tab</span>
-          <div>Job Applications</div>
-        </div>
-        <div class="setup-ui-block" data-ui data-reveal>
-          <strong>Outreach Tracker</strong>
-          <span>Sheet URL</span>
-          <div>docs.google.com/spreadsheets/…</div>
-          <span>Tab</span>
-          <div>Networking Outreach</div>
-        </div>
-      </div>
-    </section>
-
-    <section class="setup-steps" aria-labelledby="steps-title">
-      <div class="section-inner">
-        <h2 id="steps-title" data-reveal>Connect the trackers.</h2>
-        <ol class="instruction-list">
-          <li data-reveal>
-            <div>
-              <h3>Upload the workbook.</h3>
-              <p>In Google Drive, upload the downloaded file and choose Open with Google Sheets. You can keep the two trackers separate or copy both tabs into one spreadsheet.</p>
+            <div class="column-guidance" data-reveal>
+              <h3>Keep the first row and column order</h3>
+              <p>Leave the header row in place in both tabs. The extension saves data by column position, so do not reorder, insert, or remove columns A through N. You can rename the file and tabs, change the formatting, and delete the example rows.</p>
             </div>
-          </li>
-          <li data-reveal>
-            <div>
-              <h3>Open extension settings.</h3>
-              <p>Click the JobSearch Aide icon, open Settings, and sign in with the Google account that owns the sheet.</p>
-            </div>
-          </li>
-          <li data-reveal>
-            <div>
-              <h3>Paste the sheet URL.</h3>
-              <p>Paste the full Google Sheets URL into Job Applications or Outreach Tracker, choose the matching tab, then save settings.</p>
-            </div>
-          </li>
-          <li data-reveal>
-            <div>
-              <h3>Test one record.</h3>
-              <p>Save a job listing or a LinkedIn contact and confirm that a new row appears beneath the examples.</p>
-            </div>
-          </li>
-        </ol>
-      </div>
-    </section>
-
-    <section class="schema-note section-inner" aria-labelledby="schema-title">
-      <div data-reveal>
-        <h2 id="schema-title">Keep the first row in place.</h2>
-        <p>The current extension writes by column position. Do not reorder, insert, or remove columns A through N. You can rename the spreadsheet file and tab, add formatting, and delete the example data rows.</p>
-      </div>
       <div class="schema-strip" data-ui data-reveal aria-label="Required job tracker column order">
         <span>A<br><strong>Company</strong></span>
         <span>B<br><strong>Role</strong></span>
@@ -121,14 +81,40 @@
         <span>G<br><strong>Status</strong></span>
         <span>H–N<br><strong>Your details</strong></span>
       </div>
+          </div>
+        </li>
+        <li id="link-spreadsheet">
+          <div class="step-number">Step 3</div>
+          <div class="step-content">
+            <h2 data-reveal>Link your spreadsheet to the extension</h2>
+            <div class="connection-layout">
+              <div class="connection-copy">
+            <p data-reveal>Open the extension’s Settings and sign in with a Google account that can edit your spreadsheets. In each tracker section, paste the URL of the spreadsheet you want to use. Both trackers can share one spreadsheet, or each can use a separate one.</p>
+            <p data-reveal>Under <strong>Tab</strong>, select the worksheet tab where that tracker’s data should be saved—the name shown along the bottom of your Google spreadsheet. For Job Applications, choose your job application tab; for Outreach Tracker, choose your networking outreach tab. Your tab names can be different from those in the screenshot. Save your settings when both are selected.</p>
+              </div>
+            <figure class="settings-screenshot">
+              <img src="assets/spreadsheet-settings-redacted.png" alt="Extension Settings showing the spreadsheet URL and tab fields for Job Applications and Outreach Tracker. Both spreadsheet IDs are blurred." width="1089" height="1445" loading="lazy">
+              <figcaption>Example settings. Use your own spreadsheet URLs and worksheet tab names.</figcaption>
+            </figure>
+            </div>
+          </div>
+        </li>
+        <li id="profile-data">
+          <div class="step-number">Step 4</div>
+          <div class="step-content" data-reveal>
+            <h2>Set up your profile data</h2>
+            <p class="step-option">Optional · Form filling is in beta</p>
+            <p>Want help filling out application forms? Add your personal and application details to your profile in the extension’s settings, then save. You can skip this step if you only want to track jobs and outreach.</p>
+          </div>
+        </li>
+      </ol>
     </section>
 
     <section class="setup-help" aria-labelledby="help-title">
       <div class="section-inner">
-        <h2 id="help-title" data-reveal>Check these first.</h2>
+        <h2 id="help-title" data-reveal>Need help connecting?</h2>
         <div class="help-copy" data-reveal>
           <p>If the tab list does not appear, confirm that the signed-in Google account can edit the sheet, then paste the full Sheets URL again.</p>
-          <p>The extension does not write directly to a local `.xlsx` file. The file must be opened as a Google Sheet.</p>
           <p>For networking, the LinkedIn URL is the main duplicate key. If there is no URL, the extension uses contact name plus company.</p>
         </div>
       </div>

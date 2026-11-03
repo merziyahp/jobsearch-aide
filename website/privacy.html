@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Privacy Policy — JobSearch Aide</title>
   <link rel="icon" type="image/png" href="assets/icon128.png">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=setup-sequence-6">
   <script src="site.js" defer></script>
 </head>
 <body>
@@ -25,47 +25,52 @@
 
   <main id="main-content" class="privacy-content">
     <h1>Privacy Policy</h1>
-    <p class="updated">Last updated: October 22, 2026</p>
+    <p class="updated">Last updated: November 3, 2026</p>
 
-    <h2>What this extension does</h2>
-    <p>JobSearch Aide is a Chrome extension that helps you organize your job search. It saves job listing details to a Google Sheet you configure, downloads a copy of the job description to your local downloads folder, and lets you log outreach contacts to a second sheet.</p>
+    <h2>How your data is handled</h2>
+    <p>JobSearch Aide runs in your browser. Job and outreach records are sent directly from the extension to the Google spreadsheets you configure, and job description files are downloaded to your device. The extension does not send your spreadsheet contents or autofill profile to the developer.</p>
+    <p>The developer receives limited usage counts and feedback through a separate feedback feature, described below.</p>
 
-    <h2>What data we access</h2>
+    <h2>What the extension accesses</h2>
     <ul>
-      <li><strong>Google Sheets:</strong> We access only the specific Google Sheet(s) you connect during setup. We read and write job listing and outreach data to those sheets. We do not access any other files in your Google account.</li>
-      <li><strong>Active browser tab:</strong> When you click the extension, we read the content of the current page to extract job listing information. We do not store or transmit your browsing history.</li>
-      <li><strong>Downloads:</strong> We save job description files to your local downloads folder. These files never leave your device.</li>
-      <li><strong>Local storage:</strong> We store your extension settings (Sheet URL, tab name, autofill profile) locally in your browser. This data never leaves your device.</li>
+      <li><strong>Google Sheets:</strong> The extension uses the spreadsheet IDs and worksheet tabs you enter in Settings to read existing tracker records, check for duplicates, and save or update job and outreach records. It also reads spreadsheet and tab names to display setup options. These requests go directly to Google using your Google authorization; they do not pass through a developer-operated server.</li>
+      <li><strong>Web pages:</strong> The extension requests access to websites so it can extract job listings and LinkedIn contact details from the active page and fill application forms when you use those features. Its content script loads on supported web pages, and extraction runs when you open the popup. The extension does not collect or send your browsing history to the developer.</li>
+      <li><strong>Downloads:</strong> The extension creates job description files in your device’s downloads folder. It does not upload these files to the developer.</li>
+      <li><strong>Browser storage:</strong> Settings, spreadsheet IDs, tab names, your optional autofill profile, usage counts, and pending feedback are stored in the extension’s local browser storage. The extension does not use Chrome’s sync storage. Spreadsheet IDs are sent to Google when connecting or using a tracker; profile details are used on the active page when you run autofill.</li>
     </ul>
 
-    <h2>Anonymous usage counts and feedback</h2>
-    <p>To learn whether JobSearch Aide is actually useful, the extension keeps simple counts in your browser: how many times, and on how many separate days, you've used Save &amp; Log, outreach logging, and autofill, and whether you've opened or completed setup.</p>
-    <p>After you've used a feature on a few different days, the extension may ask once (and at most twice in total) whether it's useful, with a thumbs up or down and an optional comment. When you answer, skip, or close that question, these items are sent to a Google Sheet owned by the developer:</p>
+    <h2>Google account permission</h2>
+    <p>To connect spreadsheets by URL, JobSearch Aide requests Google’s spreadsheet access permission. This authorizes the extension to view, edit, create, and delete Google Sheets spreadsheets in your account. The permission applies across your spreadsheets rather than being restricted to the URLs you enter. JobSearch Aide uses it to read and update the tracker spreadsheets you configure; it does not search your Drive or create or delete spreadsheets.</p>
+    <p>Authorizing the extension does not share your spreadsheets with the developer’s Google account. The extension uses Chrome’s Google sign-in flow and sends authorization tokens to Google for spreadsheet requests, not to the feedback service.</p>
+
+    <h2>Optional autofill and equal opportunity information</h2>
+    <p>If you save a profile, its details remain in local browser storage until you use autofill. When you run autofill, the extension passes profile details to its script in the active tab and fills matching form fields. The website can read information entered into its forms, potentially before you submit them, under that website’s own privacy practices.</p>
+    <p>This also applies to optional equal opportunity information you save, such as gender, sexual orientation, race, disability status, or veteran status. Matching fields may be filled with those values. Leave these profile fields blank if you do not want the extension to use them. Profile values are not included automatically in developer feedback reports.</p>
+
+    <h2>Usage counts and feedback the developer receives</h2>
+    <p>The extension keeps local counts of successful job saving, spreadsheet logging, outreach logging, and autofill, including the number of days each feature was used. It also records whether Settings was opened and setup was completed.</p>
+    <p>After job saving or outreach has been used on several different days, the extension may show a feedback question, at most twice in total. Answering, skipping, or closing the question causes a report to be queued for the developer. If you close the popup, an unfinished response can be queued the next time you open it. Failed deliveries are retried later.</p>
+    <p>Reports are sent through Google Apps Script to a Google Sheet controlled by the developer and include:</p>
     <ul>
-      <li>A random ID generated when you install the extension. It isn't linked to your name, Google account, or browser.</li>
-      <li>The usage counts described above, how many days since install, and the extension version.</li>
-      <li>Your answer: thumbs up or down, and any optional reason or comment you typed.</li>
-      <li>Your email address, <strong>only</strong> if you tick "OK to email me about this" and enter it.</li>
+      <li>A randomly generated installation ID that lets the developer associate reports from the same installation. It is not taken from your Google account.</li>
+      <li>Feature-use and spreadsheet-logging counts, numbers of days used, setup status, days since installation, and extension version.</li>
+      <li>Which feedback prompt appeared, which feature triggered it, your rating or dismissal, and any selected reason, previous-tool answer, or comment you provide.</li>
+      <li>Your email address only if you select “OK to email me about this” and enter an address.</li>
+      <li>The time the feedback service receives the report.</li>
     </ul>
-    <p>This never includes company names, job titles, job descriptions, page addresses, LinkedIn contacts, your Google Sheet details, or anything from your autofill profile. Nothing is sent until a feedback question is shown.</p>
+    <p>Reports do not automatically include job titles, company names, job descriptions, page URLs, outreach contacts, spreadsheet IDs, tab names, or autofill profile values. Any information you type into a feedback comment is included in that comment. If you provide an email address or identifying details, the report can be associated with you, so these reports are not always anonymous.</p>
+    <p>No usage report is queued before a feedback prompt has been shown. Usage counts remain local until they are included in a feedback report.</p>
 
-    <h2>What we do not do</h2>
-    <ul>
-      <li>We do not collect your job search data, browsing history, or autofill profile.</li>
-      <li>We do not use third-party analytics, advertising, or tracking services.</li>
-      <li>We do not sell or share your data with third parties.</li>
-      <li>Your job and outreach data goes only to your own Google Sheet or your local machine.</li>
-    </ul>
+    <h2>Advertising and data sharing</h2>
+    <p>The extension does not include advertising or third-party analytics libraries. The developer does not sell data received through the feedback feature. Job and outreach records go to your configured Google spreadsheets, autofill details go to forms you choose to fill, and feedback reports go to the developer’s Google-hosted feedback service.</p>
 
-    <h2>Equal opportunity information</h2>
-    <p>If you use the autofill feature and enter equal opportunity information (gender, race, disability status, veteran status), that data is stored only in your browser's local storage (<code>chrome.storage.local</code>). It is never synced across devices and is never transmitted anywhere.</p>
-
-    <h2>Third-party services</h2>
-    <p>This extension uses the Google Sheets API to read and write data to your Google Sheet. Your use of Google Sheets is subject to <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google's Privacy Policy</a>.</p>
-    <p>Anonymous feedback is received by a Google Apps Script and stored in a Google Sheet controlled by the developer. If you shared your email with feedback and want it removed, email the address below.</p>
+    <h2>Third-party services and your choices</h2>
+    <p>Google processes spreadsheet requests, sign-in, and feedback-service requests. Use of those services is subject to <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google’s Privacy Policy</a>. Application websites handle information entered into their forms under their own policies.</p>
+    <p>You can leave the autofill profile blank and use the trackers without it. You can revoke the extension’s Google account access through your Google account settings. Uninstalling the extension removes its local browser storage; it does not delete downloaded files, tracker spreadsheets, or feedback already received by the developer.</p>
+    <p>If you provided your email with feedback and want it removed, contact the developer at the address below.</p>
 
     <h2>Contact</h2>
-    <p>Questions about this privacy policy? Email us at <a href="mailto:merziyahpoonawala@gmail.com">merziyahpoonawala@gmail.com</a>.</p>
+    <p>Questions about this privacy policy? Contact the developer at <a href="mailto:merziyahpoonawala@gmail.com">merziyahpoonawala@gmail.com</a>.</p>
   </main>
 
   <footer>
