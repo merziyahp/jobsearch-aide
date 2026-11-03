@@ -1,0 +1,540 @@
+{
+  "schemaVersion": 1,
+  "ok": true,
+  "command": "finalize",
+  "status": "pass",
+  "type": "explainer",
+  "quality": "showcase",
+  "startedAt": "2026-10-22T18:21:27.541Z",
+  "specification": {
+    "path": "/Users/merziyahpoonawala/tech_projects/jd_tracker_chrome_extension/.archify/explainer-jobsearch-aide-20261022-142026/candidate.archify.md",
+    "sha256": "1c214fb1b5fd4894f34f215f682970a6bfed6ee05450f879e9696b9aeb32c28d",
+    "bytes": 6609
+  },
+  "artifact": {
+    "path": "/Users/merziyahpoonawala/tech_projects/jd_tracker_chrome_extension/.archify/explainer-jobsearch-aide-20261022-142026/jobsearch-aide-explainer.html",
+    "sha256": "fde63d1c76786a521b280cd9bcc8747e6a57779478ba3bbd146b7e92787ec4da",
+    "bytes": 1143261
+  },
+  "stages": {
+    "browser-check": {
+      "status": "not-run",
+      "execution": "not-requested"
+    },
+    "validate": {
+      "status": "pass",
+      "exitCode": 0,
+      "durationMs": null,
+      "execution": "embedded-in-deliver",
+      "command": [
+        "/usr/local/bin/node",
+        "/Users/merziyahpoonawala/.agents/skills/archify/bin/archify.mjs",
+        "deliver",
+        "explainer",
+        "/Users/merziyahpoonawala/tech_projects/jd_tracker_chrome_extension/.archify/explainer-jobsearch-aide-20261022-142026/candidate.archify.md",
+        "/Users/merziyahpoonawala/tech_projects/jd_tracker_chrome_extension/.archify/explainer-jobsearch-aide-20261022-142026/jobsearch-aide-explainer.html",
+        "--quality",
+        "showcase",
+        "--repo-root",
+        "/Users/merziyahpoonawala/tech_projects/jd_tracker_chrome_extension",
+        "--json"
+      ],
+      "receipt": {
+        "schemaVersion": 1,
+        "ok": true,
+        "command": "validate",
+        "specification": {
+          "sha256": "1c214fb1b5fd4894f34f215f682970a6bfed6ee05450f879e9696b9aeb32c28d",
+          "bytes": 6609
+        },
+        "validation": {
+          "checksPassed": 4,
+          "checkCount": 4,
+          "compositionProfile": "showcase",
+          "compositionStatus": "pass",
+          "errors": 0,
+          "warnings": 0
+        }
+      }
+    },
+    "deliver": {
+      "status": "pass",
+      "exitCode": 0,
+      "durationMs": 429,
+      "command": [
+        "/usr/local/bin/node",
+        "/Users/merziyahpoonawala/.agents/skills/archify/bin/archify.mjs",
+        "deliver",
+        "explainer",
+        "/Users/merziyahpoonawala/tech_projects/jd_tracker_chrome_extension/.archify/explainer-jobsearch-aide-20261022-142026/candidate.archify.md",
+        "/Users/merziyahpoonawala/tech_projects/jd_tracker_chrome_extension/.archify/explainer-jobsearch-aide-20261022-142026/jobsearch-aide-explainer.html",
+        "--quality",
+        "showcase",
+        "--repo-root",
+        "/Users/merziyahpoonawala/tech_projects/jd_tracker_chrome_extension",
+        "--json"
+      ],
+      "receipt": {
+        "schemaVersion": 1,
+        "receiptId": "7648552d-90b7-453e-8aa4-1886bb76d797",
+        "ok": true,
+        "command": "deliver",
+        "type": "explainer",
+        "input": "/Users/merziyahpoonawala/tech_projects/jd_tracker_chrome_extension/.archify/explainer-jobsearch-aide-20261022-142026/candidate.archify.md",
+        "output": "/Users/merziyahpoonawala/tech_projects/jd_tracker_chrome_extension/.archify/explainer-jobsearch-aide-20261022-142026/jobsearch-aide-explainer.html",
+        "explainer": {
+          "preparedSha256": "aa2cb2f14637bda08698594f4c08d8c6abb810ee3cf8fc2ad6c9517b08111fa2",
+          "dependencies": [
+            {
+              "kind": "repository",
+              "id": "overview",
+              "path": "README.md",
+              "revision": "b812bf8bedd75fa38e44e90cd93cf19681d3d3a7",
+              "sha256": "8ab9644e5c0dc4de532b44b586827430ac7f167261101dab2424af3c13bc2da6",
+              "bytes": 1266
+            },
+            {
+              "kind": "repository",
+              "id": "popup-routing",
+              "path": "Code/popup.js",
+              "revision": "b812bf8bedd75fa38e44e90cd93cf19681d3d3a7",
+              "sha256": "8f40daf6a483cf956a65a01bdaf526af93faed55d7caf8b5e3eed4a3cdd22d3d",
+              "bytes": 20236
+            },
+            {
+              "kind": "repository",
+              "id": "popup-save",
+              "path": "Code/popup.js",
+              "revision": "b812bf8bedd75fa38e44e90cd93cf19681d3d3a7",
+              "sha256": "8f40daf6a483cf956a65a01bdaf526af93faed55d7caf8b5e3eed4a3cdd22d3d",
+              "bytes": 20236
+            },
+            {
+              "kind": "repository",
+              "id": "extraction",
+              "path": "Code/content.js",
+              "revision": "b812bf8bedd75fa38e44e90cd93cf19681d3d3a7",
+              "sha256": "d4a0b31d8aa67695128fa3a5da090c075176e1cd4457be23ae687267820eb746",
+              "bytes": 11606
+            },
+            {
+              "kind": "repository",
+              "id": "sheets-write",
+              "path": "Code/sheets.js",
+              "revision": "b812bf8bedd75fa38e44e90cd93cf19681d3d3a7",
+              "sha256": "887c5870c70563fd30566a2a6277209a691eb55d2a763d748010964560705cb5",
+              "bytes": 5784
+            },
+            {
+              "kind": "repository",
+              "id": "outreach-write",
+              "path": "Code/outreach.js",
+              "revision": "b812bf8bedd75fa38e44e90cd93cf19681d3d3a7",
+              "sha256": "e95f3f850a4d5e83d61070cdc045ed1d8f8bcffc979e5a26bb3e18f1cfa82444",
+              "bytes": 13040
+            },
+            {
+              "kind": "repository",
+              "id": "autofill",
+              "path": "Code/autofill.js",
+              "revision": "b812bf8bedd75fa38e44e90cd93cf19681d3d3a7",
+              "sha256": "96ed6a37ce721312be68858d4b903d3cc0f9271aa9983f088849281a0bd056d5",
+              "bytes": 25946
+            },
+            {
+              "kind": "repository",
+              "id": "storage",
+              "path": "Code/storage.js",
+              "revision": "b812bf8bedd75fa38e44e90cd93cf19681d3d3a7",
+              "sha256": "5f063a8fba88872f57daf28507ad1404f9696c4a508b100d5ec7e5290d06459d",
+              "bytes": 3205
+            },
+            {
+              "kind": "diagram-spec",
+              "id": "tool-paths",
+              "inline": true,
+              "sha256": "5d3e69d868b66535c8ef95148e79b30d66a544e96e51942aa06dbb3fa3ebf06b",
+              "bytes": 1982
+            },
+            {
+              "kind": "diagram-spec",
+              "id": "job-write-flow",
+              "inline": true,
+              "sha256": "c8b38927a4b2bec5731ffb4a95ad30ab65ce7e231b4a36f22ce01e5574b8fec1",
+              "bytes": 2343
+            }
+          ]
+        },
+        "specification": {
+          "sha256": "1c214fb1b5fd4894f34f215f682970a6bfed6ee05450f879e9696b9aeb32c28d",
+          "bytes": 6609
+        },
+        "artifact": {
+          "sha256": "fde63d1c76786a521b280cd9bcc8747e6a57779478ba3bbd146b7e92787ec4da",
+          "bytes": 1143261
+        },
+        "validation": {
+          "checksPassed": 4,
+          "checkCount": 4,
+          "compositionProfile": "showcase",
+          "compositionStatus": "pass",
+          "errors": 0,
+          "warnings": 0
+        },
+        "update": {
+          "status": "unavailable",
+          "installedVersion": null,
+          "availableVersion": null,
+          "releaseNotes": null,
+          "checkedAt": null,
+          "source": null,
+          "noticeRequired": false,
+          "noticeText": null,
+          "reason": "disabled"
+        }
+      }
+    },
+    "check": {
+      "status": "pass",
+      "exitCode": 0,
+      "durationMs": 198,
+      "command": [
+        "/usr/local/bin/node",
+        "/Users/merziyahpoonawala/.agents/skills/archify/bin/archify.mjs",
+        "check",
+        "/Users/merziyahpoonawala/tech_projects/jd_tracker_chrome_extension/.archify/explainer-jobsearch-aide-20261022-142026/jobsearch-aide-explainer.html",
+        "--require-provenance"
+      ],
+      "receipt": {
+        "ok": true,
+        "file": "/Users/merziyahpoonawala/tech_projects/jd_tracker_chrome_extension/.archify/explainer-jobsearch-aide-20261022-142026/jobsearch-aide-explainer.html",
+        "family": "explainer",
+        "artifact": {
+          "sha256": "fde63d1c76786a521b280cd9bcc8747e6a57779478ba3bbd146b7e92787ec4da",
+          "bytes": 1143261
+        },
+        "checks": [
+          {
+            "name": "explainer_structure",
+            "ok": true,
+            "details": [
+              "73 unique DOM IDs"
+            ]
+          },
+          {
+            "name": "explainer_payload_identity",
+            "ok": true,
+            "details": []
+          },
+          {
+            "name": "explainer_dependencies",
+            "ok": true,
+            "details": [
+              "10 frozen dependencies"
+            ]
+          },
+          {
+            "name": "explainer_native_diagrams",
+            "ok": true,
+            "details": [
+              "tool-paths: pass",
+              "job-write-flow: pass"
+            ]
+          }
+        ],
+        "composition": {
+          "schemaVersion": 1,
+          "profile": "showcase",
+          "status": "pass",
+          "summary": {
+            "errors": 0,
+            "warnings": 0
+          },
+          "issues": [],
+          "nativeDiagrams": [
+            {
+              "id": "tool-paths",
+              "receipt": {
+                "ok": true,
+                "file": "/var/folders/yl/jhtcz5k927d0l5flw7jc7fcr0000gn/T/archify-explainer-check-iG8jnG/child.html",
+                "artifact": {
+                  "sha256": "6a3bc1ecec9fb7defe33848a0d148751b18babc5d1459f7671b8db7ff80486bd",
+                  "bytes": 820339
+                },
+                "checks": [
+                  {
+                    "name": "single_svg",
+                    "ok": true,
+                    "details": [
+                      "found 1 <svg> block(s)"
+                    ]
+                  },
+                  {
+                    "name": "finite_svg",
+                    "ok": true,
+                    "details": []
+                  },
+                  {
+                    "name": "orthogonal_arrows",
+                    "ok": true,
+                    "details": []
+                  },
+                  {
+                    "name": "label_route_clearance",
+                    "ok": true,
+                    "details": []
+                  },
+                  {
+                    "name": "relationship_crossings",
+                    "ok": true,
+                    "details": []
+                  },
+                  {
+                    "name": "relationship_corridors",
+                    "ok": true,
+                    "details": []
+                  },
+                  {
+                    "name": "container_border_runs",
+                    "ok": true,
+                    "details": []
+                  },
+                  {
+                    "name": "route_rhythm",
+                    "ok": true,
+                    "details": []
+                  },
+                  {
+                    "name": "legend_clearance",
+                    "ok": true,
+                    "details": []
+                  }
+                ],
+                "composition": {
+                  "schemaVersion": 1,
+                  "profile": "showcase",
+                  "status": "pass",
+                  "summary": {
+                    "errors": 0,
+                    "warnings": 0
+                  },
+                  "metrics": {
+                    "properCrossings": 0,
+                    "resolvedCrossovers": 0,
+                    "ambiguousCorridors": 0,
+                    "arrowheadCollisions": 0,
+                    "containerBorderRuns": 0,
+                    "labelRouteClearanceIssues": 0,
+                    "labelCanvasOverflowIssues": 0,
+                    "minLabelRouteClearance": 14.3,
+                    "desktopReadabilityIssues": 0,
+                    "viewportHeightIssues": 0,
+                    "minProjectedNodeTextPx": 7.258536585365854,
+                    "maxBends": 0,
+                    "routesOverSuggestedBends": 0,
+                    "maxStretch": 1,
+                    "routesOverSuggestedStretch": 0,
+                    "minSegmentPx": 8,
+                    "minInteriorSegmentPx": null,
+                    "shortSegmentCount": 1,
+                    "shortEndpointSegmentCount": 1,
+                    "shortInteriorSegmentCount": 0,
+                    "microSegmentCount": 0
+                  },
+                  "suggestedLimits": {
+                    "bendsPerRelationship": 2,
+                    "stretch": 1.35,
+                    "segmentPx": 16,
+                    "microSegmentPx": 8
+                  },
+                  "routeReview": {
+                    "crossings": [],
+                    "detours": []
+                  },
+                  "leadingSpace": {
+                    "measured": false,
+                    "reviewSuggested": false
+                  },
+                  "desktopReadability": {
+                    "budgetBasis": "legacy-930",
+                    "readerContract": "declared-wide-v1",
+                    "availableDiagramWidth": 930,
+                    "actualBudgetPx": 930,
+                    "limit": "legacy",
+                    "requestedTargetPx": null,
+                    "requestedTargetMet": null,
+                    "hardFloorPx": 6,
+                    "hardFloorMet": true,
+                    "minimumOwner": {
+                      "kind": "edge",
+                      "id": "choose-to-fill-1",
+                      "from": "choose",
+                      "to": "fill"
+                    },
+                    "minimumSourceTextPx": 8,
+                    "minimumProjectedTextPx": 7.258536585365854,
+                    "semanticTextCount": 18
+                  },
+                  "issues": []
+                }
+              }
+            },
+            {
+              "id": "job-write-flow",
+              "receipt": {
+                "ok": true,
+                "file": "/var/folders/yl/jhtcz5k927d0l5flw7jc7fcr0000gn/T/archify-explainer-check-f2tUoB/child.html",
+                "artifact": {
+                  "sha256": "8442ee8d52a6b73883feb65e85b1ca72a728343f221bd4c27e9b71dfd62498aa",
+                  "bytes": 823593
+                },
+                "checks": [
+                  {
+                    "name": "single_svg",
+                    "ok": true,
+                    "details": [
+                      "found 1 <svg> block(s)"
+                    ]
+                  },
+                  {
+                    "name": "finite_svg",
+                    "ok": true,
+                    "details": []
+                  },
+                  {
+                    "name": "orthogonal_arrows",
+                    "ok": true,
+                    "details": []
+                  },
+                  {
+                    "name": "label_route_clearance",
+                    "ok": true,
+                    "details": []
+                  },
+                  {
+                    "name": "relationship_crossings",
+                    "ok": true,
+                    "details": []
+                  },
+                  {
+                    "name": "relationship_corridors",
+                    "ok": true,
+                    "details": []
+                  },
+                  {
+                    "name": "container_border_runs",
+                    "ok": true,
+                    "details": []
+                  },
+                  {
+                    "name": "route_rhythm",
+                    "ok": true,
+                    "details": []
+                  },
+                  {
+                    "name": "legend_clearance",
+                    "ok": true,
+                    "details": []
+                  }
+                ],
+                "composition": {
+                  "schemaVersion": 1,
+                  "profile": "showcase",
+                  "status": "pass",
+                  "summary": {
+                    "errors": 0,
+                    "warnings": 0
+                  },
+                  "metrics": {
+                    "properCrossings": 0,
+                    "resolvedCrossovers": 0,
+                    "ambiguousCorridors": 0,
+                    "arrowheadCollisions": 0,
+                    "containerBorderRuns": 0,
+                    "labelRouteClearanceIssues": 0,
+                    "labelCanvasOverflowIssues": 0,
+                    "minLabelRouteClearance": 27,
+                    "desktopReadabilityIssues": 0,
+                    "viewportHeightIssues": 0,
+                    "minProjectedNodeTextPx": 7.153846153846154,
+                    "maxBends": 0,
+                    "routesOverSuggestedBends": 0,
+                    "maxStretch": 1,
+                    "routesOverSuggestedStretch": 0,
+                    "minSegmentPx": 8,
+                    "minInteriorSegmentPx": null,
+                    "shortSegmentCount": 6,
+                    "shortEndpointSegmentCount": 6,
+                    "shortInteriorSegmentCount": 0,
+                    "microSegmentCount": 0
+                  },
+                  "suggestedLimits": {
+                    "bendsPerRelationship": 2,
+                    "stretch": 1.35,
+                    "segmentPx": 16,
+                    "microSegmentPx": 8
+                  },
+                  "routeReview": {
+                    "crossings": [],
+                    "detours": []
+                  },
+                  "leadingSpace": {
+                    "measured": false,
+                    "reviewSuggested": false
+                  },
+                  "desktopReadability": {
+                    "budgetBasis": "legacy-930",
+                    "readerContract": "declared-wide-v1",
+                    "availableDiagramWidth": 930,
+                    "actualBudgetPx": 930,
+                    "limit": "legacy",
+                    "requestedTargetPx": null,
+                    "requestedTargetMet": null,
+                    "hardFloorPx": 6,
+                    "hardFloorMet": true,
+                    "minimumOwner": {
+                      "kind": "edge",
+                      "id": "auth-to-overwrite-1",
+                      "from": "auth",
+                      "to": "overwrite"
+                    },
+                    "minimumSourceTextPx": 8,
+                    "minimumProjectedTextPx": 7.153846153846154,
+                    "semanticTextCount": 22
+                  },
+                  "issues": []
+                }
+              }
+            }
+          ]
+        },
+        "diagnostics": [],
+        "provenance": "current",
+        "deliveryReceiptId": "7648552d-90b7-453e-8aa4-1886bb76d797"
+      }
+    }
+  },
+  "browserCheck": {
+    "requested": false,
+    "ran": false
+  },
+  "diagnostics": [],
+  "evidence": {
+    "receipt": "/Users/merziyahpoonawala/tech_projects/jd_tracker_chrome_extension/.archify/explainer-jobsearch-aide-20261022-142026/jobsearch-aide-explainer.finalize.json",
+    "summaryReceipt": "/Users/merziyahpoonawala/tech_projects/jd_tracker_chrome_extension/.archify/explainer-jobsearch-aide-20261022-142026/jobsearch-aide-explainer.finalize-summary.json"
+  },
+  "visualReview": "not-requested",
+  "finishedAt": "2026-10-22T18:21:28.251Z",
+  "durationMs": 710,
+  "update": {
+    "status": "unavailable",
+    "installedVersion": null,
+    "availableVersion": null,
+    "releaseNotes": null,
+    "checkedAt": null,
+    "source": null,
+    "noticeRequired": false,
+    "noticeText": null,
+    "reason": "cache-unavailable"
+  }
+}

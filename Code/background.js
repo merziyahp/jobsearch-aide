@@ -19,8 +19,8 @@ async function tlFlushOutbox() {
     for (const item of outbox) {
       let sent = false;
       try {
-        // host_permissions (<all_urls>) lets the worker read the Apps Script
-        // reply, so we only drop an item once the script confirms "ok".
+        // Explicit Apps Script host permissions cover the endpoint and its
+        // googleusercontent.com redirect. Only drop a confirmed "ok" reply.
         const res = await fetch(TELEMETRY_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'text/plain;charset=utf-8' },

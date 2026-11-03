@@ -3,6 +3,14 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const E = require('../Code/content.js');
 
+test('LinkedIn contact names exclude leading notification counts', () => {
+  assert.equal(E.parseLinkedInProfileName('(3) Jane Smith | LinkedIn'), 'Jane Smith');
+  assert.equal(E.parseLinkedInProfileName(' (123)Jane Smith | LinkedIn'), 'Jane Smith');
+  assert.equal(E.parseLinkedInProfileName('Jane Smith | LinkedIn'), 'Jane Smith');
+  assert.equal(E.parseLinkedInProfileName('Jane (Jay) Smith | LinkedIn'), 'Jane (Jay) Smith');
+  assert.equal(E.parseLinkedInProfileName('(Jay) Smith | LinkedIn'), '(Jay) Smith');
+});
+
 test('parses LinkedIn current public job title format', () => {
   assert.deepEqual(
     E.parseLinkedInPageTitle(

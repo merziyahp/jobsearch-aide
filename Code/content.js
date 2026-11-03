@@ -924,16 +924,20 @@ function htmlToMarkdown(el) {
 // Targets LinkedIn profile pages: linkedin.com/in/username
 //
 // Name is parsed from the page title which LinkedIn formats consistently as
-// "First Last | LinkedIn". URL is cleaned to the canonical profile format.
+// "(3) First Last | LinkedIn" (notification count optional).
+// URL is cleaned to the canonical profile format.
 // Role and company are left blank for manual entry — LinkedIn lazy-loads the
 // experience section below the fold making it unreliable to scrape.
+
+function parseLinkedInProfileName(title) {
+  return title.split('|')[0].trim().replace(/^\(\d+\)\s*/, '').trim();
+}
 
 function extractLinkedInProfile() {
   const url = cleanLinkedInUrl(window.location.href);
 
   // ── Name — parse from page title ──
-  // LinkedIn title format: "First Last | LinkedIn"
-  const name = document.title.split('|')[0].trim();
+  const name = parseLinkedInProfileName(document.title);
 
   return {
     url,
@@ -1005,6 +1009,7 @@ if (typeof module !== 'undefined' && module.exports) {
     normalizeMetadata,
     normalizeTitleForMatch,
     parseLinkedInPageTitle,
+    parseLinkedInProfileName,
     plausibleCompany,
     plausibleRole,
     mainContentSelectors,

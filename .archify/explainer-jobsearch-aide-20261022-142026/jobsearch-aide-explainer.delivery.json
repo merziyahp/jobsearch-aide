@@ -1,0 +1,100 @@
+{
+  "schemaVersion": 1,
+  "receiptId": "7648552d-90b7-453e-8aa4-1886bb76d797",
+  "status": "current",
+  "command": "deliver",
+  "type": "explainer",
+  "input": "/Users/merziyahpoonawala/tech_projects/jd_tracker_chrome_extension/.archify/explainer-jobsearch-aide-20261022-142026/candidate.archify.md",
+  "output": "/Users/merziyahpoonawala/tech_projects/jd_tracker_chrome_extension/.archify/explainer-jobsearch-aide-20261022-142026/jobsearch-aide-explainer.html",
+  "specification": {
+    "sha256": "1c214fb1b5fd4894f34f215f682970a6bfed6ee05450f879e9696b9aeb32c28d",
+    "bytes": 6609
+  },
+  "artifact": {
+    "sha256": "fde63d1c76786a521b280cd9bcc8747e6a57779478ba3bbd146b7e92787ec4da",
+    "bytes": 1143261
+  },
+  "explainer": {
+    "preparedSha256": "aa2cb2f14637bda08698594f4c08d8c6abb810ee3cf8fc2ad6c9517b08111fa2",
+    "dependencies": [
+      {
+        "kind": "repository",
+        "id": "overview",
+        "path": "README.md",
+        "revision": "b812bf8bedd75fa38e44e90cd93cf19681d3d3a7",
+        "sha256": "8ab9644e5c0dc4de532b44b586827430ac7f167261101dab2424af3c13bc2da6",
+        "bytes": 1266
+      },
+      {
+        "kind": "repository",
+        "id": "popup-routing",
+        "path": "Code/popup.js",
+        "revision": "b812bf8bedd75fa38e44e90cd93cf19681d3d3a7",
+        "sha256": "8f40daf6a483cf956a65a01bdaf526af93faed55d7caf8b5e3eed4a3cdd22d3d",
+        "bytes": 20236
+      },
+      {
+        "kind": "repository",
+        "id": "popup-save",
+        "path": "Code/popup.js",
+        "revision": "b812bf8bedd75fa38e44e90cd93cf19681d3d3a7",
+        "sha256": "8f40daf6a483cf956a65a01bdaf526af93faed55d7caf8b5e3eed4a3cdd22d3d",
+        "bytes": 20236
+      },
+      {
+        "kind": "repository",
+        "id": "extraction",
+        "path": "Code/content.js",
+        "revision": "b812bf8bedd75fa38e44e90cd93cf19681d3d3a7",
+        "sha256": "d4a0b31d8aa67695128fa3a5da090c075176e1cd4457be23ae687267820eb746",
+        "bytes": 11606
+      },
+      {
+        "kind": "repository",
+        "id": "sheets-write",
+        "path": "Code/sheets.js",
+        "revision": "b812bf8bedd75fa38e44e90cd93cf19681d3d3a7",
+        "sha256": "887c5870c70563fd30566a2a6277209a691eb55d2a763d748010964560705cb5",
+        "bytes": 5784
+      },
+      {
+        "kind": "repository",
+        "id": "outreach-write",
+        "path": "Code/outreach.js",
+        "revision": "b812bf8bedd75fa38e44e90cd93cf19681d3d3a7",
+        "sha256": "e95f3f850a4d5e83d61070cdc045ed1d8f8bcffc979e5a26bb3e18f1cfa82444",
+        "bytes": 13040
+      },
+      {
+        "kind": "repository",
+        "id": "autofill",
+        "path": "Code/autofill.js",
+        "revision": "b812bf8bedd75fa38e44e90cd93cf19681d3d3a7",
+        "sha256": "96ed6a37ce721312be68858d4b903d3cc0f9271aa9983f088849281a0bd056d5",
+        "bytes": 25946
+      },
+      {
+        "kind": "repository",
+        "id": "storage",
+        "path": "Code/storage.js",
+        "revision": "b812bf8bedd75fa38e44e90cd93cf19681d3d3a7",
+        "sha256": "5f063a8fba88872f57daf28507ad1404f9696c4a508b100d5ec7e5290d06459d",
+        "bytes": 3205
+      },
+      {
+        "kind": "diagram-spec",
+        "id": "tool-paths",
+        "inline": true,
+        "sha256": "5d3e69d868b66535c8ef95148e79b30d66a544e96e51942aa06dbb3fa3ebf06b",
+        "bytes": 1982
+      },
+      {
+        "kind": "diagram-spec",
+        "id": "job-write-flow",
+        "inline": true,
+        "sha256": "c8b38927a4b2bec5731ffb4a95ad30ab65ce7e231b4a36f22ce01e5574b8fec1",
+        "bytes": 2343
+      }
+    ]
+  }
+}

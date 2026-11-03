@@ -2,7 +2,7 @@
 
 All screenshots at **1280x800**. Use Chrome DevTools device toolbar (Cmd+Shift+M, set to 1280x800) then right-click → "Capture screenshot".
 
-Use realistic but fake data throughout — no real names, emails, or company names.
+Use synthetic personal and tracker data throughout. Blur spreadsheet IDs, private URLs, account names, emails, and identifying browser chrome before publishing. Keep the real tracker column order; screenshots must not imply a schema the extension cannot write.
 
 ---
 
@@ -33,15 +33,13 @@ Use realistic but fake data throughout — no real names, emails, or company nam
 
 **Setup:**
 1. Open your tracking Google Sheet.
-2. Populate 4–5 rows with fake but realistic job entries:
+2. Keep template columns A–N in order. Populate A–G with synthetic job entries as below; retain H–N for the reserved/manual fields:
 
-| Company | Role | URL | Status | Date Added |
-|---------|------|-----|--------|------------|
-| Acme Corp | Senior Product Manager | https://jobs.acme.com/... | Applied | 2026-05-20 |
-| Meridian Health | UX Research Lead | https://meridian.com/... | Interviewing | 2026-05-18 |
-| Northfield Labs | Product Designer | https://jobs.northfield.io/... | Saved | 2026-05-22 |
-| Cascadia Systems | Growth Marketing Manager | https://cascadia.com/... | Applied | 2026-05-23 |
-| Blue Harbor Co | Operations Analyst | https://blueharbor.com/... | Saved | 2026-05-24 |
+| Company Name | Role Title | URL | Applied | Date Applied | Fit Level | Status |
+|---|---|---|---|---|---|---|
+| Acme Corp | Senior Product Manager | https://example.com/jobs/1 | y | 2026-11-01 | 8 | Applied |
+| Meridian Health | UX Research Lead | https://example.com/jobs/2 | | 2026-11-02 | 7 | Saved |
+| Northfield Labs | Product Designer | https://example.com/jobs/3 | y | 2026-11-03 | 9 | Applied |
 
 3. Widen columns so all data is readable.
 4. Freeze the header row so it's visible.
@@ -68,7 +66,7 @@ Use realistic but fake data throughout — no real names, emails, or company nam
    - Name: "Jordan Lee"
    - Role: "Engineering Manager"
    - Company: "Acme Corp"
-   - Notes: "Met at ProductCon, referred by Sarah"
+   - How We Connected: "Met at ProductCon, referred by Alex"
 4. The LinkedIn profile page should be clearly visible behind the popup.
 
 **Before screenshotting:**
@@ -91,14 +89,17 @@ Note: if blurring the LinkedIn background is needed, use macOS Preview → Tools
 1. Open the JobSearch Aide Google Sheets template (outreach tab).
 2. Populate 4–5 rows with fake contact entries:
 
-| Name | Company | Role | Date Contacted | Follow-up Date | Notes |
-|------|---------|------|---------------|---------------|-------|
-| Jordan Lee | Acme Corp | Engineering Manager | 2026-05-20 | 2026-05-27 | Met at ProductCon |
-| Riley Chen | Meridian Health | Head of Product | 2026-05-18 | 2026-05-25 | LinkedIn cold outreach |
-| Sam Patel | Northfield Labs | Recruiter | 2026-05-22 | 2026-05-29 | Referred by Alex |
-| Morgan Wu | Cascadia Systems | VP Engineering | 2026-05-23 | 2026-05-30 | Alumni network |
+Keep columns A–N in the template order. Example A–G values:
 
-3. Make the "Follow-up Date" column clearly visible and highlighted if possible (light fill color).
+| Company | Contact Name | Role | LinkedIn URL | How We Connected | Last Follow Up | Status |
+|---|---|---|---|---|---|---|
+| Acme Corp | Jordan Lee | Engineering Manager | | Product event | 2026-11-01 | Pending 3B |
+| Meridian Health | Riley Chen | Head of Product | | Alumni network | 2026-11-02 | Message Sent |
+| Northfield Labs | Sam Patel | Recruiter | | Referred by Alex | | Prospect |
+
+Retain H–M for template notes and follow-up formulas, and N for Date of Original Request. If showing a next-action date, label it as the template’s calculated or manually maintained value rather than a date scheduled by the extension.
+
+3. Make the "Last Follow Up" and template "Next Action Date" columns clearly visible and highlighted if possible (light fill color).
 4. Widen columns so all data is readable.
 
 **Before screenshotting:**
